@@ -33,14 +33,17 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage){
-        primaryStage.setTitle("Hello World!");
+        // Title of the window
+        primaryStage.setTitle("Spotify Data Visualizer");
+        // Login Button
         Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        btn.setText("Login To Account");
+        // Make the button have an event
         btn.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                // Make the button open the authorize 
             }
         });
         
