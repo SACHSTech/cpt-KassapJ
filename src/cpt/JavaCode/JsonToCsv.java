@@ -1,4 +1,4 @@
-package cpt;
+package cpt.JavaCode;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,11 +14,13 @@ public class JsonToCsv {
     public static void main(String[] args) {
         JSONParser parser = new JSONParser();
 
-        try (FileReader reader = new FileReader("data.json"))
+        try (FileReader reader = new FileReader("src/cpt/SpotifyJsonFilesHERE/StreamingHistory0.json"))
         {
+            // identifying the json array we're reading through
             Object obj = parser.parse(reader);
             JSONArray jsonArray = (JSONArray) obj;
             String csv = "";
+            // Creating a string text to format the csv
             for (Object jsonObject : jsonArray) {
                 JSONObject json = (JSONObject) jsonObject;
                 for (Object key : json.keySet()) {
@@ -26,7 +28,9 @@ public class JsonToCsv {
                 }
                 csv += "\n";
             }
-            try (FileWriter writer = new FileWriter("data.csv")) {
+
+            // writing the csv file
+            try (FileWriter writer = new FileWriter("src/cpt/ConvertedFiles/data.csv")) {
                 writer.write(csv);
                 writer.flush();
             }

@@ -1,4 +1,4 @@
-package cpt;
+package cpt.JavaCode;
 
 import java.io.FileReader;
 import java.io.FileWriter;
