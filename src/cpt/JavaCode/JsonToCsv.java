@@ -1,5 +1,6 @@
 package cpt.JavaCode;
 
+import java.io.*;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +14,9 @@ public class JsonToCsv {
 
     public static void main(String[] args) {
         JSONParser parser = new JSONParser();
-
+        String directory =  "src/cpt/SpotifyJsonFilesHERE/DROPFILESHERE.txt";
+        String[] files = directory.list()
+        //choosing the file to read
         try (FileReader reader = new FileReader("src/cpt/SpotifyJsonFilesHERE/StreamingHistory0.json"))
         {
             // identifying the json array we're reading through
