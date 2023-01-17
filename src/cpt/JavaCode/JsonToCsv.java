@@ -1,6 +1,7 @@
 package cpt.JavaCode;
 
 import java.io.*;
+import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,7 +12,7 @@ public class JsonToCsv {
 
     public static void main(String[] args) {
         JSONParser parser = new JSONParser();
-        File directory =  new File("src/cpt/SpotifyJsonFilesHERE");
+        File directory =  new File("SpotifyJsonFilesHERE");
         String[] files = directory.list();
         int intJsonAmount = files.length - 1;
         String csv = "";
@@ -20,7 +21,7 @@ public class JsonToCsv {
         
         //Go through all the streaming history files
         for(int i = 0; i < intJsonAmount; i++){
-            try (FileReader reader = new FileReader("src/cpt/SpotifyJsonFilesHERE/StreamingHistory" + i + ".json")){
+            try (FileReader reader = new FileReader("SpotifyJsonFilesHERE/StreamingHistory" + i + ".json")){
             // identifying the json array we're reading through
             Object obj = parser.parse(reader);
             JSONArray jsonArray = (JSONArray) obj;
@@ -31,15 +32,20 @@ public class JsonToCsv {
         }
 
         for(int i = 0; i < intJsonAmount; i++){
-            try (FileReader reader = new FileReader("src/cpt/SpotifyJsonFilesHERE/StreamingHistory" + i + ".json")){
+            try (FileReader reader = new FileReader("SpotifyJsonFilesHERE/StreamingHistory" + i + ".json")){
             // identifying the json array we're reading through
             Object obj = parser.parse(reader);
             JSONArray jsonArray = (JSONArray) obj;
             // Creating a string text to format the csv
             for (Object jsonObject : jsonArray) {
                 JSONObject json = (JSONObject) jsonObject;
-                for (Object key : json.keySet()) {
-                    csv += json.get(key) + ",";
+                Iterator<String> iterator = json.keySet().iterator();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    csv += json.get(key);
+                    if (iterator.hasNext()) {
+                        csv += ",";
+                    }
                 }
                 csv += "\n";
                 count++;
@@ -51,7 +57,7 @@ public class JsonToCsv {
             }
         }
             // writing the csv file
-            try (FileWriter writer = new FileWriter("src/cpt/ConvertedFiles/data.csv")) {
+            try (FileWriter writer = new FileWriter("ConvertedFiles/data.csv")) {
                 writer.write(csv);
                 writer.flush();
             }catch (IOException e) {

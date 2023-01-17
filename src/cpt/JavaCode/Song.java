@@ -14,15 +14,14 @@ public class Song {
     private int hourListened;
     private int minuteListened;
 
-    public Song(int intMsListened, String strArtistName, int intYear, int intMonth, int intDay, int intHours, int intMinute, String strSongName){
+    public Song(int intMsListened, String strArtistName, String strDate, String strSongName){
         this.artistName = strArtistName;
         this.songName = strSongName;
         this.msListened = intMsListened;
-        this.yearListened = intYear;
-        this.monthListened = intMonth;
-        this.dayListened = intDay;
-        this.hourListened = intHours;
-        this.minuteListened = intMinute;
+
+        // Converting the string date to individual integers
+
+        // Creating a song code with the first bits of the artist name and song name
     }
     /**
     * this method returns a String value that represents the name of the artist
