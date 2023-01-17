@@ -60,6 +60,7 @@ public class JsonToCsv {
             try (FileWriter writer = new FileWriter("ConvertedFiles/data.csv")) {
                 writer.write(csv);
                 writer.flush();
+                System.out.println("File conversion complete");
             }catch (IOException e) {
             e.printStackTrace();
             }
