@@ -15,6 +15,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
@@ -40,6 +43,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     @Override 
     public void start(Stage primaryStage) throws Exception {
+        
         // Defining the primarystage as our homepage
         homepage = primaryStage;
 
@@ -53,12 +57,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         
         // Grid Alignment setup
         GridPane grid = new GridPane();
+        grid.setAlignment(Pos.TOP_LEFT);
         grid.setHgap(10);
-        grid.setVgap(8);
+        grid.setVgap(10);
         grid.setPadding(new Insets(0,0,0,0));
 
         //Rectangle
-
         Rectangle rectangle = new Rectangle();
         rectangle.setWidth(1280);
         rectangle.setHeight(100);
@@ -69,18 +73,18 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         homepageTitle.setFont(font);
         homepageTitle.setStrokeWidth(0);
         homepageTitle.setFill(Color.WHITE);
-        grid.add(homepageTitle, 0, 0);
+        grid.add(homepageTitle, 1, 0);
 
 
         //button
         Button btn = new Button();
         btn.setText("Switch to scene 2");
         btn.setOnAction(this);
-        grid.add(btn, 5, 5);
+        grid.add(btn, 0, 5);
 
         // Creating scene
+        grid.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), new CornerRadii(0), new Insets(0))));
         Scene scene = new Scene(grid, 1280, 720);
-        scene.setFill(Color.rgb(20, 20, 20));
 
         // Showing scene to stage
         homepage.setScene(scene);
