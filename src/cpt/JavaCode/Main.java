@@ -34,7 +34,7 @@ import javafx.scene.text.Text;
  */
 
 public class Main extends Application implements EventHandler<ActionEvent>{
-        Button btn;
+        Button button1;
         Stage homepage;
 
         public static void main(String[] args) {
@@ -62,29 +62,22 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         grid.setVgap(10);
         grid.setPadding(new Insets(0,0,0,0));
 
-        //Rectangle
-        Rectangle rectangle = new Rectangle();
-        rectangle.setWidth(1280);
-        rectangle.setHeight(100);
-        grid.add(rectangle,0,0);
+        // Creating scene
+        grid.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), new CornerRadii(0), new Insets(0))));
+        Scene scene = new Scene(grid, 1280, 720);
 
         // Title text
         Text homepageTitle = new Text("Spotify Data Visualizer");
         homepageTitle.setFont(font);
         homepageTitle.setStrokeWidth(0);
         homepageTitle.setFill(Color.WHITE);
-        grid.add(homepageTitle, 1, 0);
-
+        grid.add(homepageTitle, 0, 0);
 
         //button
-        Button btn = new Button();
-        btn.setText("Switch to scene 2");
-        btn.setOnAction(this);
-        grid.add(btn, 0, 5);
-
-        // Creating scene
-        grid.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), new CornerRadii(0), new Insets(0))));
-        Scene scene = new Scene(grid, 1280, 720);
+        button1 = new Button();
+        button1.setText("Switch to scene 2");
+        button1.setOnAction(this);
+        grid.add(button1, 1, 5);
 
         // Showing scene to stage
         homepage.setScene(scene);
@@ -93,7 +86,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     @Override
     public void handle(ActionEvent event){
-        if(event.getSource() == btn){
+        if(event.getSource() == button1){
             System.out.println("Swaggy");
         }
     }
