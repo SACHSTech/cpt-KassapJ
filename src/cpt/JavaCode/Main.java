@@ -19,6 +19,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -35,53 +36,62 @@ import javafx.scene.text.Text;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
         Button button1;
-        Stage homepage;
+        Button button2;
+        Scene homepage, scene2;
+
 
         public static void main(String[] args) {
         launch(args);
     }
 
     @Override 
-    public void start(Stage primaryStage) throws Exception {
-        
-        // Defining the primarystage as our homepage
-        homepage = primaryStage;
-
+    public void start(Stage window) throws Exception {
         // Fonts and sizes
         Font font = Font.loadFont("file:Resources/fonts/coolvetica.otf", 45);
 
         // Window Setup
         Image icon = new Image("file:resources/images/icon.png");
-        homepage.getIcons().add(icon);
-        homepage.setTitle("Spotify Data Visualizer");
+        window.getIcons().add(icon);
+        window.setTitle("Spotify Data Visualizer");
         
+        // ========= THIS IS THE HOMEPAGE =============
         // Grid Alignment setup
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.TOP_LEFT);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(0,0,0,0));
-
-        // Creating scene
-        grid.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), new CornerRadii(0), new Insets(0))));
-        Scene scene = new Scene(grid, 1280, 720);
+        GridPane root = new GridPane();
+        root.setAlignment(Pos.TOP_LEFT);
+        root.setHgap(10);
+        root.setVgap(10);
+        root.setPadding(new Insets(0,0,0,0));
+        root.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), new CornerRadii(0), new Insets(0))));
 
         // Title text
         Text homepageTitle = new Text("Spotify Data Visualizer");
         homepageTitle.setFont(font);
         homepageTitle.setStrokeWidth(0);
         homepageTitle.setFill(Color.WHITE);
-        grid.add(homepageTitle, 0, 0);
+        root.add(homepageTitle, 0, 0);
 
         //button
         button1 = new Button();
         button1.setText("Switch to scene 2");
-        button1.setOnAction(this);
-        grid.add(button1, 1, 5);
+        button1.setOnAction(e -> window.setScene(scene2));
+        root.add(button1, 1, 5);
+
+        // Creating scene
+        homepage = new Scene(root, 1280, 720);
+    
+        //====== THIS IS THE FIRST GRAPH=========
+        // Button 2
+        button2 = new Button("Scene 1");
+        button2.setOnAction(e -> window.setScene(homepage));
+
+        // Layout 2
+        StackPane layout2 = new StackPane();
+        layout2.getChildren().add(button2);
+        scene2 = new Scene(layout2, 1280, 720);
 
         // Showing scene to stage
-        homepage.setScene(scene);
-        homepage.show();
+        window.setScene(homepage);
+        window.show();
     }
 
     @Override
