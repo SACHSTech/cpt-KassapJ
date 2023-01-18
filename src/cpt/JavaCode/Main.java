@@ -35,9 +35,11 @@ import javafx.scene.text.Text;
  */
 
 public class Main extends Application implements EventHandler<ActionEvent>{
+        Button sortData;
         Button button1;
         Button button2;
         Scene homepage, scene2;
+        dataSorter data = new dataSorter("ConvertedFiles/data.csv");
 
 
         public static void main(String[] args) {
@@ -75,6 +77,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         button1.setText("Switch to scene 2");
         button1.setOnAction(e -> window.setScene(scene2));
         root.add(button1, 1, 5);
+
+        //button 
+        sortData = new Button();
+        sortData.setText("Sort my data");
+        sortData.setOnAction(e -> dataSorter.sort(););
 
         // Creating scene
         homepage = new Scene(root, 1280, 720);
