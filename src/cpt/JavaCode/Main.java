@@ -81,7 +81,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         //button 
         sortData = new Button();
         sortData.setText("Sort my data");
-        sortData.setOnAction(e -> dataSorter.sort(););
+        sortData.setOnAction(e -> data.sort());
 
         // Creating scene
         homepage = new Scene(root, 1280, 720);
@@ -103,9 +103,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     @Override
     public void handle(ActionEvent event){
-        if(event.getSource() == button1){
-            System.out.println("Swaggy");
-        }
     }
 
 }
