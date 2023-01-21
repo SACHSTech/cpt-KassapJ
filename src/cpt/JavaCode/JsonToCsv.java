@@ -52,7 +52,7 @@ public class JsonToCsv {
                     for(int j = 0; j < tempString.length(); j++){
                         char ch = tempString.charAt(j);
                         if(ch == ','){
-                            tempString2 += ".";
+                            tempString2 += "€";
                         }
                         else{
                             tempString2 += ch;

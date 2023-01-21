@@ -27,6 +27,7 @@ public class dataSorter{
             String songName = "";
             String msListened = "";
             String dateListened = "";
+            String tempString2 = "";
             int songCode = 0;
             int count = 0;
             int count2test = 0;
@@ -40,7 +41,7 @@ public class dataSorter{
                     if(count == 0){
                         msListened = tempString;
                     }
-                    else if(count ==1){
+                    else if(count == 1){
                         artistName = tempString;
                     }
                     else if(count == 2){
@@ -59,7 +60,32 @@ public class dataSorter{
                 //songCode = 
                 // once you collect all the variables, run a binary search 
                 //to find the right place to insert it based on the songcode
-                //songs.add(new Song(msListened, artistName, songName, songCode));
+                //songs.add(new Song(msListened, artistName, songName, songCode))
+                
+                // Fix artist name and song name having € in it, and convert those to commas
+                tempString2 = "";
+                for(int i = 0; i < artistName.length(); i++){
+                    char ch = artistName.charAt(i);
+                    if(ch == '€'){
+                        tempString2 += ",";
+                    }
+                    else{
+                        tempString2 += ch;
+                    }
+                }
+                artistName = tempString2;
+                tempString2 = "";
+                for(int i = 0; i < songName.length(); i++){
+                    char ch = songName.charAt(i);
+                    if(ch == '€'){
+                        tempString2 += ",";
+                    }
+                    else{
+                        tempString2 += ch;
+                    }
+                }
+                songName = tempString2;
+
                 listenEvents.add(new ListenEvent(msListened, artistName, dateListened, songName));
                 System.out.println(listenEvents.get(count2test).getMsListened() + " - " + listenEvents.get(count2test).getArtistName() + " - " + listenEvents.get(count2test).getSongName() + " - " + listenEvents.get(count2test).getSongCode()  + " - " + listenEvents.get(count2test).getYearListened()  + " - " + listenEvents.get(count2test).getMonthListened() + " - " + listenEvents.get(count2test).getDayListened() + " - " + listenEvents.get(count2test).getHourListened() + " - " + listenEvents.get(count2test).getMinuteListened());
                 count2test++;
