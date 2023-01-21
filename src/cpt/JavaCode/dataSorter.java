@@ -25,7 +25,8 @@ public class dataSorter{
             String[] tempArray;
             String artistName = "";
             String songName = "";
-            String msListened = "";
+            String tempMsListened = "";
+            int msListened = 0;
             String dateListened = "";
             String tempString2 = "";
             int songCode = 0;
@@ -34,11 +35,12 @@ public class dataSorter{
             while((line = bufferedReader.readLine()) != null){
                 tempArray = line.split(delimiter);
                 count = 0;
+                int[] indexes = new int[2];
                 // This isn't useful to the code, just to see what's happening. This is where we would access the variables and add it to the object
                 for(String tempString : tempArray){
                     // Temp string is the data that I'm at this current moment
                     if(count == 0){
-                        msListened = tempString;
+                        tempMsListened = tempString;
                     }
                     else if(count == 1){
                         artistName = tempString;
@@ -99,21 +101,34 @@ public class dataSorter{
                     }
                 }
                 songName = tempString2;
-
-                listenEvents.add(new ListenEvent(msListened, artistName, dateListened, songName, songCode));
-                songs.add(binarySearch(songs, songCode), new Song(msListened, artistName, songName, songCode));
+                msListened = Integer.parseInt(tempMsListened);
 
                 // Use binary search to sort these objects into the arraylist properly
                 // SONGS OBJECT
+                indexes = binarySearch(songs, songCode, msListened);
+                // add listening event
+                listenEvents.add(indexes[1], new ListenEvent(msListened, artistName, dateListened, songName, songCode));
+                // only add song if there's no duplicate
+                if(indexes[0] == -1){
+                    
+                }
+                else if(indexes[0] >= 0){
+                    songs.add(indexes[0], new Song(msListened, artistName, songName, songCode));
+                }
             }
             bufferedReader.close();
 
             // Testing the arrays we made
 
             for(int i = 0; i < songs.size(); i++){
-                //System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
                 System.out.println(songs.get(i).getArtistName() + " - " + songs.get(i).getSongName() + " - " + songs.get(i).getMsListened() + " - " + songs.get(i).getSongCode());
             }
+            
+            /* 
+            for(int i = 0; i < listenEvents.size(); i++){
+            System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
+            }
+            */
 
         }catch(IOException ioe) {
             ioe.printStackTrace();
@@ -126,20 +141,25 @@ public class dataSorter{
     * representing the index where the key matches. If not found, it will return where it's supposed to be
     *
     * @param int[] array, int key
-    * @return int index
+    * @return int[] indexes (2 indexes)
     */
-    public int binarySearch(ArrayList<Song> arr, int key){
+    public int[] binarySearch(ArrayList<Song> arr, int key, int msListened){
 
+        int[] tempArr = new int[2];
         int low = 0;
         int high = arr.size() - 1;
 
         while(low <= high){
             int mid = (low + high) / 2;
             int cur = arr.get(mid).getSongCode();
-
             if(cur == key){
                 // Add the objects together
-                return mid;
+                songs.get(mid).addMsListened(msListened);
+
+                // return -1 so we don't add it to the arraylist
+                tempArr[0] = -1;
+                tempArr[1] = mid;
+                return tempArr;
             }
             else if(cur < key){
                 low = mid + 1;
@@ -148,6 +168,8 @@ public class dataSorter{
                 high = mid - 1;
             }
         }
-        return (high + 1);
+        tempArr[0] = high + 1;
+        tempArr[1] = high + 1;
+        return tempArr;
     }
 }
