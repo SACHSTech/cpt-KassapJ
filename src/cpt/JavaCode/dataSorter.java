@@ -30,7 +30,6 @@ public class dataSorter{
             String tempString2 = "";
             int songCode = 0;
             int count = 0;
-            int count2test = 0;
 
             while((line = bufferedReader.readLine()) != null){
                 tempArray = line.split(delimiter);
@@ -77,7 +76,7 @@ public class dataSorter{
                     // Making song code
                     if(i < 2){
                         songCode += (Character.toUpperCase(ch));
-                        songCode *= 10;
+                        songCode *= 100;
                     }
                 }
                 artistName = tempString2;
@@ -95,23 +94,60 @@ public class dataSorter{
                     if(i < 2){
                         songCode += (Character.toUpperCase(ch));
                         if(i < 1){
-                            songCode *= 10;
+                            songCode *= 100;
                         }
                     }
                 }
                 songName = tempString2;
 
                 listenEvents.add(new ListenEvent(msListened, artistName, dateListened, songName, songCode));
-                songs.add(new Song(msListened, artistName, songName, songCode));
-                System.out.println(listenEvents.get(count2test).getMsListened() + " - " + listenEvents.get(count2test).getArtistName() + " - " + listenEvents.get(count2test).getSongName() + " - " + listenEvents.get(count2test).getSongCode()  + " - " + listenEvents.get(count2test).getYearListened()  + " - " + listenEvents.get(count2test).getMonthListened() + " - " + listenEvents.get(count2test).getDayListened() + " - " + listenEvents.get(count2test).getHourListened() + " - " + listenEvents.get(count2test).getMinuteListened());
-                count2test++;
+                songs.add(binarySearch(songs, songCode), new Song(msListened, artistName, songName, songCode));
+
+                // Use binary search to sort these objects into the arraylist properly
+                // SONGS OBJECT
             }
             bufferedReader.close();
 
+            // Testing the arrays we made
+
+            for(int i = 0; i < songs.size(); i++){
+                //System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
+                System.out.println(songs.get(i).getArtistName() + " - " + songs.get(i).getSongName() + " - " + songs.get(i).getMsListened() + " - " + songs.get(i).getSongCode());
+            }
 
         }catch(IOException ioe) {
             ioe.printStackTrace();
          }
 
+    }
+
+    /**
+    * this method takes a key and array, and searches through the array (edited to work for the song and listenevent classes) and returns an int
+    * representing the index where the key matches. If not found, it will return where it's supposed to be
+    *
+    * @param int[] array, int key
+    * @return int index
+    */
+    public int binarySearch(ArrayList<Song> arr, int key){
+
+        int low = 0;
+        int high = arr.size() - 1;
+
+        while(low <= high){
+            int mid = (low + high) / 2;
+            int cur = arr.get(mid).getSongCode();
+
+            if(cur == key){
+                // Add the objects together
+                return mid;
+            }
+            else if(cur < key){
+                low = mid + 1;
+            }
+            else{
+                high = mid - 1;
+            }
+        }
+        return (high + 1);
     }
 }

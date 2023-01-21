@@ -9,10 +9,10 @@ public class Song {
     private int songCode;
     private int msListened;
 
-    public Song(String msListened, String strArtistName, String strSongName, int intSongCode){
+    public Song(int intMsListened, String strArtistName, String strSongName, int intSongCode){
         this.artistName = strArtistName;
         this.songName = strSongName;
-        this.msListened = Integer.parseInt(msListened);
+        this.msListened = intMsListened;
         this.songCode = intSongCode;
 
         // Converting the string date to individual integers
@@ -27,6 +27,46 @@ public class Song {
     */
     public String getArtistName(){
         return this.artistName;
+    }
+
+    /**
+    * this method returns a String value that represents the name of the song
+    *
+    * @param N/A
+    * @return String songName
+    */
+    public String getSongName(){
+        return this.songName;
+    }
+
+    /**
+    * this method returns a int value that represents the msListened this song was listened to in all of the data
+    *
+    * @param N/A
+    * @return int msListened
+    */
+    public int getMsListened(){
+        return this.msListened;
+    }
+
+    /**
+    * this method returns a intg value that represents the code used to organize this song
+    *
+    * @param N/A
+    * @return int songCode
+    */
+    public int getSongCode(){
+        return this.songCode;
+    }
+
+    /**
+    * this method adds a given int representing mslistened, and adds it to the one already in the object
+    *
+    * @param int msListened
+    * @return N/A
+    */
+    public void addMsListened(int x){
+        this.msListened += x;
     }
 
 }

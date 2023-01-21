@@ -12,10 +12,10 @@ public class ListenEvent {
     private int hourListened;
     private int minuteListened;
 
-    public ListenEvent(String msListened, String strArtistName, String strDate, String strSongName, int intSongCode){
+    public ListenEvent(int intMsListened, String strArtistName, String strDate, String strSongName, int intSongCode){
         this.artistName = strArtistName;
         this.songName = strSongName;
-        this.msListened = Integer.parseInt(msListened);
+        this.msListened = intMsListened;
         this.songCode = intSongCode;
         this.dateListened = strDate;
 
