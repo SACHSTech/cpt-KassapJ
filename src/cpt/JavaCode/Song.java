@@ -8,16 +8,12 @@ public class Song {
     private String songName;
     private int songCode;
     private int msListened;
-    private int yearListened;
-    private int monthListened;
-    private int dayListened;
-    private int hourListened;
-    private int minuteListened;
 
-    public Song(int intMsListened, String strArtistName, String strDate, String strSongName){
+    public Song(String msListened, String strArtistName, String strSongName, int intSongCode){
         this.artistName = strArtistName;
         this.songName = strSongName;
-        this.msListened = intMsListened;
+        this.msListened = Integer.parseInt(msListened);
+        this.songCode = intSongCode;
 
         // Converting the string date to individual integers
 
@@ -32,5 +28,6 @@ public class Song {
     public String getArtistName(){
         return this.artistName;
     }
+
 }
 

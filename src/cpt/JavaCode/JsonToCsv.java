@@ -19,7 +19,7 @@ public class JsonToCsv {
         double jsonArraySize = 0;
         double count = 0;
         
-        //Go through all the streaming history files
+        //Go through all the streaming history files, determine size of file to make progress bar
         for(int i = 0; i < intJsonAmount; i++){
             try (FileReader reader = new FileReader("SpotifyJsonFilesHERE/StreamingHistory" + i + ".json")){
             // identifying the json array we're reading through
@@ -31,6 +31,7 @@ public class JsonToCsv {
             }
         }
 
+        // Convert json to csv
         for(int i = 0; i < intJsonAmount; i++){
             try (FileReader reader = new FileReader("SpotifyJsonFilesHERE/StreamingHistory" + i + ".json")){
             // identifying the json array we're reading through
@@ -43,6 +44,7 @@ public class JsonToCsv {
                 while (iterator.hasNext()) {
                     String key = iterator.next();
                     csv += json.get(key);
+
                     if (iterator.hasNext()) {
                         csv += ",";
                     }

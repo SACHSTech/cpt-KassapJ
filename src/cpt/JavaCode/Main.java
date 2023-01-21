@@ -59,7 +59,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         // ========= THIS IS THE HOMEPAGE =============
         // Grid Alignment setup
         GridPane root = new GridPane();
-        root.setAlignment(Pos.TOP_LEFT);
         root.setHgap(10);
         root.setVgap(10);
         root.setPadding(new Insets(0,0,0,0));
@@ -78,7 +77,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         button1.setOnAction(e -> window.setScene(scene2));
         root.add(button1, 1, 5);
 
-        //button 
+        //button to sort data
         sortData = new Button();
         sortData.setText("Sort my data");
         sortData.setOnAction(e -> data.sort());
@@ -94,6 +93,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         // Layout 2
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);
+        layout2.getChildren().add(sortData);
+        layout2.setAlignment(button2, Pos.TOP_RIGHT);
         scene2 = new Scene(layout2, 1280, 720);
 
         // Showing scene to stage
