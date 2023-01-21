@@ -16,6 +16,8 @@ public class JsonToCsv {
         String[] files = directory.list();
         int intJsonAmount = files.length - 1;
         String csv = "";
+        String tempString = "";
+        String tempString2 = "";
         double jsonArraySize = 0;
         double count = 0;
         
@@ -43,7 +45,21 @@ public class JsonToCsv {
                 Iterator<String> iterator = json.keySet().iterator();
                 while (iterator.hasNext()) {
                     String key = iterator.next();
-                    csv += json.get(key);
+                    //csv += json.get(key);
+                    tempString = "";
+                    tempString2 = "";
+                    tempString += json.get(key);
+                    for(int j = 0; j < tempString.length(); j++){
+                        char ch = tempString.charAt(j);
+                        if(ch == ','){
+                            tempString2 += ".";
+                        }
+                        else{
+                            tempString2 += ch;
+                        }
+                    }
+
+                    csv += tempString2;
 
                     if (iterator.hasNext()) {
                         csv += ",";
