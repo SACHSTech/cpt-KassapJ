@@ -12,30 +12,45 @@ public class ListenEvent {
     private int hourListened;
     private int minuteListened;
 
-    public ListenEvent(String msListened, String strArtistName, String strDate, String strSongName){
+    public ListenEvent(String msListened, String strArtistName, String strDate, String strSongName, int intSongCode){
         this.artistName = strArtistName;
         this.songName = strSongName;
         this.msListened = Integer.parseInt(msListened);
-        this.songCode = 00000000;
+        this.songCode = intSongCode;
         this.dateListened = strDate;
 
-        //2022-01-11 00:03 example of date and time
-        for(int i = 0; i < dateListened.length() - 1; i++){
+        //CONVERTING THE DATE AND TIMES TO THEIR OWN INT VARIABLES
+        for(int i = 0; i < dateListened.length(); i++){
             char ch = dateListened.charAt(i);
             if(i <= 3){
-                this.yearListened += ch;
+                this.yearListened += (ch - '0');
+                if(i < 3){
+                    this.yearListened *= 10;
+                }
             }
-            else if(i >= 5 || i <= 6){
-                this.monthListened += ch;
+            else if(i > 4 && i < 7){
+                this.monthListened += (ch - '0');
+                if(i < 6){
+                    this.monthListened *= 10;
+                }
             }
-            else if(i >= 8 || i <= 9){
-                this.dayListened += ch;
+            else if(i > 7 && i < 10){
+                this.dayListened += (ch - '0');
+                if(i < 9){
+                    this.dayListened *= 10;
+                }
             }
-            else if(i >= 11 || i <= 12){
-                this.hourListened += ch;
+            else if(i > 10 && i < 13){
+                this.hourListened += (ch - '0');
+                if(i < 12){
+                    this.hourListened *= 10;
+                }
             }
-            else if(i >= 11 || i <= 12){
-                this.minuteListened += ch;
+            else if(i > 13){
+                this.minuteListened += (ch - '0');
+                if(i < 15){
+                    this.minuteListened *= 10;
+                }
             }
         }
     }
@@ -138,5 +153,15 @@ public class ListenEvent {
     */
     public int getMinuteListened(){
         return this.minuteListened;
+    }
+
+    /**
+    * Method that gets the String value of the date
+    *
+    * @param N/A
+    * @return int strDate
+    */
+    public String getStrDate(){
+        return this.dateListened;
     }
 }

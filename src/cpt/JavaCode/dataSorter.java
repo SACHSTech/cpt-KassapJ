@@ -64,13 +64,20 @@ public class dataSorter{
                 
                 // Fix artist name and song name having € in it, and convert those to commas
                 tempString2 = "";
+                songCode = 0;
                 for(int i = 0; i < artistName.length(); i++){
                     char ch = artistName.charAt(i);
                     if(ch == '€'){
                         tempString2 += ",";
+                        ch = ',';
                     }
                     else{
                         tempString2 += ch;
+                    }
+                    // Making song code
+                    if(i < 2){
+                        songCode += (Character.toUpperCase(ch));
+                        songCode *= 10;
                     }
                 }
                 artistName = tempString2;
@@ -79,14 +86,23 @@ public class dataSorter{
                     char ch = songName.charAt(i);
                     if(ch == '€'){
                         tempString2 += ",";
+                        ch = ',';
                     }
                     else{
                         tempString2 += ch;
                     }
+                    // Making songcode
+                    if(i < 2){
+                        songCode += (Character.toUpperCase(ch));
+                        if(i < 1){
+                            songCode *= 10;
+                        }
+                    }
                 }
                 songName = tempString2;
 
-                listenEvents.add(new ListenEvent(msListened, artistName, dateListened, songName));
+                listenEvents.add(new ListenEvent(msListened, artistName, dateListened, songName, songCode));
+                songs.add(new Song(msListened, artistName, songName, songCode));
                 System.out.println(listenEvents.get(count2test).getMsListened() + " - " + listenEvents.get(count2test).getArtistName() + " - " + listenEvents.get(count2test).getSongName() + " - " + listenEvents.get(count2test).getSongCode()  + " - " + listenEvents.get(count2test).getYearListened()  + " - " + listenEvents.get(count2test).getMonthListened() + " - " + listenEvents.get(count2test).getDayListened() + " - " + listenEvents.get(count2test).getHourListened() + " - " + listenEvents.get(count2test).getMinuteListened());
                 count2test++;
             }
