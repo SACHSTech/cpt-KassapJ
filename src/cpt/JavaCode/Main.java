@@ -24,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
@@ -253,7 +254,19 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         lineChart.getData().add(series);
 
-        graph1 = new Scene(lineChart, 1280, 720);
+        BorderPane graphShower1 = new BorderPane();
+        HBox graph1Top = new HBox();   
+        graphShower1.setTop(graph1Top);
+        graphShower1.setCenter(lineChart);
+
+        // Add title to hbox
+        Text graph1Title = new Text("Graph #1");
+        graph1Title.setFont(font);
+        graph1Title.setStrokeWidth(0);
+        graph1Title.setFill(Color.BLACK);
+        graph1Top.getChildren().add(graph1Title);
+        
+        graph1 = new Scene(graphShower1, 1280, 720);
         
         //====== THIRD SCREEN WITH SECOND GRAPH======
         //===========================================
