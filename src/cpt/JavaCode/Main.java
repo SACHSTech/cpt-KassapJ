@@ -14,7 +14,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -47,10 +49,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button button1;
         Button button2;
         Button button3;
+        Button button4;
         boolean isDataSorted;
         private ArrayList <Song> songs;
         private ArrayList <ListenEvent> listenEvents;
-        Scene homepage, scene2, tableScene, graph1;
+        Scene homepage, scene2, tableScene, graph1, graph2;
         dataSorter data = new dataSorter("ConvertedFiles/data.csv");
         JsonToCsv converter = new JsonToCsv();
 
@@ -122,6 +125,10 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         button3 = new Button("Scene 3:");
         button3.setOnAction(e -> window.setScene(graph1));
 
+        // Button 3
+        button4 = new Button("Scene 4:");
+        button4.setOnAction(e -> window.setScene(graph2));
+
         // Layout 2
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);
@@ -129,6 +136,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         layout2.setAlignment(button2, Pos.TOP_RIGHT);
         layout2.getChildren().add(button3);
         layout2.setAlignment(button3, Pos.TOP_LEFT);
+        layout2.getChildren().add(button4);
+        layout2.setAlignment(button4, Pos.BOTTOM_LEFT);
         scene2 = new Scene(layout2, 1280, 720);
 
         //======== Table of values scene =========
@@ -164,40 +173,114 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
 
         //====== SECOND SCREEN WITH FIRST GRAPH======
-        
-        // First graph
-        ArrayList<String> songNames = new ArrayList<String>();
-        //String[] songNames = new String[songs.size()];
-        ArrayList<Integer> songMsListened = new ArrayList<Integer>();
+        //===========================================
+        //===========================================
+        //===========================================
+        //===========================================
 
-        for(int i = 0; i < songs.size() - 1; i++){
-            //songNames[i] = songs.get(i).getSongName();
-            songNames.add(i, songs.get(i).getSongName());
-            songMsListened.add(i, songs.get(i).getMsListened());
+        // This graph should show how often you listen to music at certain months, days, hours..
+        
+        int eventsJan = 0;
+        int eventsFeb = 0;
+        int eventsMar = 0;
+        int eventsApr = 0;
+        int eventsMay = 0;
+        int eventsJun = 0;
+        int eventsJul = 0;
+        int eventsAug = 0;
+        int eventsSep = 0;
+        int eventsOct = 0;
+        int eventsNov = 0;
+        int eventsDec = 0;
+
+        for(int i = 0; i < listenEvents.size() - 1; i++){
+            int tempMonth = listenEvents.get(i).getMonthListened();
+            if(tempMonth == 1){
+                eventsJan++;
+            }
+            else if(tempMonth == 2){
+                eventsFeb++;
+            }
+            else if(tempMonth == 3){
+                eventsMar++;
+            }
+            else if(tempMonth == 4){
+                eventsApr++;
+            }
+            else if(tempMonth == 5){
+                eventsMay++;
+            }
+            else if(tempMonth == 6){
+                eventsJun++;
+            }
+            else if(tempMonth == 7){
+                eventsJul++;
+            }
+            else if(tempMonth == 8){
+                eventsAug++;
+            }
+            else if(tempMonth == 9){
+                eventsSep++;
+            }
+            else if(tempMonth == 10){
+                eventsOct++;
+            }
+            else if(tempMonth == 11){
+                eventsNov++;
+            }
+            else if(tempMonth == 12){
+                eventsDec++;
+            }
+
+        }
+        int[] timesPerMonth = {eventsJan, eventsFeb, eventsMar, eventsApr, eventsMay, eventsJun, eventsJul, eventsAug, eventsSep, eventsOct, eventsNov, eventsDec};
+        
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        final NumberAxis lineXAxis = new NumberAxis();
+        final NumberAxis lineYAxis = new NumberAxis();
+        lineXAxis.setLabel("Months");
+        lineYAxis.setLabel("Times listened");
+
+        final LineChart<Number, Number> lineChart = new LineChart<>(lineXAxis, lineYAxis);
+        lineChart.setTitle("Amount of songs listened per month the last year");
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Monthly");
+        for(int i = 0; i < months.length ; i++){
+            series.getData().add(new XYChart.Data<>(i, timesPerMonth[i]));
         }
 
-        BarChart chart;
-        CategoryAxis xAxis;
-        NumberAxis yAxis;
+        lineChart.getData().add(series);
 
-        xAxis = new CategoryAxis();
-        xAxis.setCategories(FXCollections.<String>observableArrayList(songNames));
-        yAxis = new NumberAxis("MsListened", 0, 100000, 100000000);
-        ObservableList<BarChart.Series> barChartData =
-            FXCollections.observableArrayList(
-                new BarChart.Series("Songs",
-                                    FXCollections.observableArrayList(
-                    new BarChart.Data(songs.get(0), songMsListened.get(0)),
-                    new BarChart.Data(songs.get(1), songMsListened.get(1)),
-                    new BarChart.Data(songs.get(2), songMsListened.get(2))
-                )));
-
-        chart = new BarChart(xAxis, yAxis, barChartData, 25);
-
-        VBox layout3 = new VBox(chart);
-        graph1 = new Scene(layout3, 1280, 720);
-
+        graph1 = new Scene(lineChart, 1280, 720);
+        
         //====== THIRD SCREEN WITH SECOND GRAPH======
+        //===========================================
+        //===========================================
+        //===========================================
+        //===========================================
+
+
+        final CategoryAxis barXAxis = new CategoryAxis();
+        final NumberAxis barYAxis = new NumberAxis();
+        final BarChart<String, Number> barChart = new BarChart<>(barXAxis, barYAxis);
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("Data Set 1");
+        for(int i = 0; i < songs.size() - 1; i++){
+            series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
+        }
+        //series1.getData().add(new XYChart.Data<>("Item 2", 80));
+        //series1.getData().add(new XYChart.Data<>("Item 3", 60));
+        //series1.getData().add(new XYChart.Data<>("Item 4", 75));
+
+        barChart.getData().add(series1);
+        barChart.setTitle("Bar Graph Example");
+        barXAxis.setLabel("Items");
+        barYAxis.setLabel("Values");
+
+        graph2 = new Scene(barChart, 1280, 720);
 
         // Showing scene to stage
         window.setScene(homepage);
