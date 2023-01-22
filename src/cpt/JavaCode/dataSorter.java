@@ -196,4 +196,34 @@ public class dataSorter{
         }
         return high + 1;
     }
+
+    /**
+    * this method will get the name of a song in the songs object array, given an index variable
+    *
+    * @param int x (index)
+    * @return String songName
+    */
+    public int getSongsSize(){
+        return this.songs.size();
+    }
+
+    /**
+    * this method will get the name of a song in the songs object array, given an index variable
+    *
+    * @param int x (index)
+    * @return String songName
+    */
+    public String getSongName(int x){
+        return this.songs.get(x).getSongName();
+    }
+
+    /**
+    * this method will get the msListened of a song
+    *
+    * @param int x (index)
+    * @return String songName
+    */
+    public int getSongsMsListened(int x){
+        return this.songs.get(x).getMsListened();
+    }
 }

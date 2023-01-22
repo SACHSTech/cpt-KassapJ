@@ -1,5 +1,7 @@
 package cpt.JavaCode;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.collections.FXCollections;
@@ -20,6 +22,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -39,7 +42,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button button1;
         Button button2;
         Button button3;
-        Scene homepage, scene2;
+        boolean isDataSorted;
+        Scene homepage, scene2, graph1;
         dataSorter data = new dataSorter("ConvertedFiles/data.csv");
 
 
@@ -47,6 +51,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         launch(args);
     }
 
+    
     @Override 
     public void start(Stage window) throws Exception {
         // Fonts and sizes
@@ -78,34 +83,86 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         button1.setOnAction(e -> window.setScene(scene2));
         root.add(button1, 1, 5);
 
-        //button to sort data
-        sortData = new Button();
-        sortData.setText("Sort my data");
-        sortData.setOnAction(e -> data.sort());
-
         // Creating scene
         homepage = new Scene(root, 1280, 720);
     
         //====== FIRST SCREEN THAT HAS BUTTON TO SORT DATA =========
         // Eventually add a drag and drop for the folder
 
+        //button to sort data
+        sortData = new Button();
+        sortData.setText("Sort my data");
+        sortData.setOnAction(e -> {
+            isDataSorted = true;
+            data.sort();
+        });
+
         // Button 2
         button2 = new Button("Scene 1");
         button2.setOnAction(e -> window.setScene(homepage));
+
+        // Button 3
+        button3 = new Button("Scene 3:");
+        if(isDataSorted){
+            button3.setOnAction(e -> window.setScene(graph1));
+        }
+        else if(isDataSorted == false){
+            button3.setOnAction(e -> System.out.println("data not sorted"));
+        }
 
         // Layout 2
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);
         layout2.getChildren().add(sortData);
         layout2.setAlignment(button2, Pos.TOP_RIGHT);
+        layout2.getChildren().add(button3);
+        layout2.setAlignment(button3, Pos.TOP_LEFT);
         scene2 = new Scene(layout2, 1280, 720);
 
         //====== SECOND SCREEN WITH FIRST GRAPH======
-        button3 = new Button("Scene 2:");
-        button3.setOnAction(e -> window.setScene(scene2));
+        
+        // First graph
+        ArrayList<String> songNames = new ArrayList<String>();
+        ArrayList<Integer> songMsListened = new ArrayList<Integer>();
+
+        for(int i = 0; i < data.getSongsSize() - 1; i++){
+            songNames.add(i, data.getSongName(i));
+            songMsListened.add(i, data.getSongsMsListened(i));
+            System.out.println("added");
+        }
+        BarChart chart;
+        CategoryAxis xAxis;
+        NumberAxis yAxis;
+        
+        String[] years = {"2007", "2008", "2009"};
+        xAxis = new CategoryAxis();
+        xAxis.setCategories(FXCollections.<String>observableArrayList(years));
+        yAxis = new NumberAxis("Units Sold", 0.0d, 3000.0d, 1000.0d);
+        ObservableList<BarChart.Series> barChartData =
+            FXCollections.observableArrayList(
+                new BarChart.Series("Apples",
+                                    FXCollections.observableArrayList(
+                    new BarChart.Data(years[0], 567d),
+                    new BarChart.Data(years[1], 1292d),
+                    new BarChart.Data(years[2], 1292d))),
+                new BarChart.Series("Lemons",
+                                    FXCollections.observableArrayList(
+                    new BarChart.Data(years[0], 956),
+                    new BarChart.Data(years[1], 1665),
+                    new BarChart.Data(years[2], 2559))),
+                new BarChart.Series("Oranges",
+                                    FXCollections.observableArrayList(
+                    new BarChart.Data(years[0], 1154),
+                    new BarChart.Data(years[1], 1927),
+                    new BarChart.Data(years[2], 2774)))
+            );
+        chart = new BarChart(xAxis, yAxis, barChartData, 25.0d);
+
+
 
         // Look at ensemble to make this graph
-
+        VBox layout3 = new VBox(chart);
+        graph1 = new Scene(layout3, 1280, 720);
 
         //====== THIRD SCREEN WITH SECOND GRAPH======
 
