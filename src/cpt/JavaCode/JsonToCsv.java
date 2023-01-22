@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 
 public class JsonToCsv {
 
-    public static void main(String[] args) {
+    public void convert(){
         JSONParser parser = new JSONParser();
         File directory =  new File("SpotifyJsonFilesHERE");
         String[] files = directory.list();

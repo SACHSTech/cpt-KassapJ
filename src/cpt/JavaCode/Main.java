@@ -16,11 +16,16 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -43,9 +48,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button button2;
         Button button3;
         boolean isDataSorted;
-        Scene homepage, scene2, graph1;
+        private ArrayList <Song> songs;
+        private ArrayList <ListenEvent> listenEvents;
+        Scene homepage, scene2, tableScene, graph1;
         dataSorter data = new dataSorter("ConvertedFiles/data.csv");
-
+        JsonToCsv converter = new JsonToCsv();
 
         public static void main(String[] args) {
         launch(args);
@@ -54,6 +61,16 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     @Override 
     public void start(Stage window) throws Exception {
+        // initialize object lists
+       songs = new ArrayList<Song>();
+       listenEvents = new ArrayList<ListenEvent>();
+        
+        // Sort the csv
+        //converter.convert();
+        data.sort();
+        songs = data.getSongs();
+        listenEvents = data.getListenEvents();
+
         // Fonts and sizes
         Font font = Font.loadFont("file:Resources/fonts/coolvetica.otf", 45);
 
@@ -93,8 +110,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         sortData = new Button();
         sortData.setText("Sort my data");
         sortData.setOnAction(e -> {
-            isDataSorted = true;
-            data.sort();
+            
+            window.setScene(tableScene);
         });
 
         // Button 2
@@ -103,12 +120,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         // Button 3
         button3 = new Button("Scene 3:");
-        if(isDataSorted){
-            button3.setOnAction(e -> window.setScene(graph1));
-        }
-        else if(isDataSorted == false){
-            button3.setOnAction(e -> System.out.println("data not sorted"));
-        }
+        button3.setOnAction(e -> window.setScene(graph1));
 
         // Layout 2
         StackPane layout2 = new StackPane();
@@ -119,48 +131,69 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         layout2.setAlignment(button3, Pos.TOP_LEFT);
         scene2 = new Scene(layout2, 1280, 720);
 
+        //======== Table of values scene =========
+        // Create an arraylist to hold the sorted data
+
+        BorderPane layout4 = new BorderPane();
+
+        // Create table of values
+        TableView table = new TableView<Song>();
+
+        // format columns
+        TableColumn songNameColumn = new TableColumn<Song, String>("Song Name");
+        songNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
+
+        TableColumn artistNameColumn = new TableColumn<Song, String>("Artist Name");
+        artistNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("artistName"));
+
+        TableColumn msListenedColumn = new TableColumn<Song, Integer>("MsListened");
+        msListenedColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
+
+        // add columns
+        table.getColumns().add(songNameColumn);
+        table.getColumns().add(artistNameColumn);
+        table.getColumns().add(msListenedColumn);
+
+        // add our already sorted data
+        for(int i = 0; i < songs.size() - 1; i++){
+            table.getItems().add(songs.get(i));
+        }
+        layout4.setCenter(table);
+        tableScene = new Scene(layout4, 1280, 720);
+
+
+
         //====== SECOND SCREEN WITH FIRST GRAPH======
         
         // First graph
         ArrayList<String> songNames = new ArrayList<String>();
+        //String[] songNames = new String[songs.size()];
         ArrayList<Integer> songMsListened = new ArrayList<Integer>();
 
-        for(int i = 0; i < data.getSongsSize() - 1; i++){
-            songNames.add(i, data.getSongName(i));
-            songMsListened.add(i, data.getSongsMsListened(i));
-            System.out.println("added");
+        for(int i = 0; i < songs.size() - 1; i++){
+            //songNames[i] = songs.get(i).getSongName();
+            songNames.add(i, songs.get(i).getSongName());
+            songMsListened.add(i, songs.get(i).getMsListened());
         }
+
         BarChart chart;
         CategoryAxis xAxis;
         NumberAxis yAxis;
-        
-        String[] years = {"2007", "2008", "2009"};
+
         xAxis = new CategoryAxis();
-        xAxis.setCategories(FXCollections.<String>observableArrayList(years));
-        yAxis = new NumberAxis("Units Sold", 0.0d, 3000.0d, 1000.0d);
+        xAxis.setCategories(FXCollections.<String>observableArrayList(songNames));
+        yAxis = new NumberAxis("MsListened", 0, 100000, 100000000);
         ObservableList<BarChart.Series> barChartData =
             FXCollections.observableArrayList(
-                new BarChart.Series("Apples",
+                new BarChart.Series("Songs",
                                     FXCollections.observableArrayList(
-                    new BarChart.Data(years[0], 567d),
-                    new BarChart.Data(years[1], 1292d),
-                    new BarChart.Data(years[2], 1292d))),
-                new BarChart.Series("Lemons",
-                                    FXCollections.observableArrayList(
-                    new BarChart.Data(years[0], 956),
-                    new BarChart.Data(years[1], 1665),
-                    new BarChart.Data(years[2], 2559))),
-                new BarChart.Series("Oranges",
-                                    FXCollections.observableArrayList(
-                    new BarChart.Data(years[0], 1154),
-                    new BarChart.Data(years[1], 1927),
-                    new BarChart.Data(years[2], 2774)))
-            );
-        chart = new BarChart(xAxis, yAxis, barChartData, 25.0d);
+                    new BarChart.Data(songs.get(0), songMsListened.get(0)),
+                    new BarChart.Data(songs.get(1), songMsListened.get(1)),
+                    new BarChart.Data(songs.get(2), songMsListened.get(2))
+                )));
 
+        chart = new BarChart(xAxis, yAxis, barChartData, 25);
 
-
-        // Look at ensemble to make this graph
         VBox layout3 = new VBox(chart);
         graph1 = new Scene(layout3, 1280, 720);
 

@@ -66,8 +66,8 @@ public class dataSorter{
                 // Fix artist name and song name having € in it, and convert those to commas
                 tempString2 = "";
                 songCode = 0;
-                for(int i = 0; i < artistName.length(); i++){
-                    char ch = artistName.charAt(i);
+                for(int i = 0; i < songName.length(); i++){
+                    char ch = songName.charAt(i);
                     if(ch == '€'){
                         tempString2 += ",";
                         ch = ',';
@@ -81,10 +81,10 @@ public class dataSorter{
                         songCode *= 100;
                     }
                 }
-                artistName = tempString2;
+                songName = tempString2;
                 tempString2 = "";
-                for(int i = 0; i < songName.length(); i++){
-                    char ch = songName.charAt(i);
+                for(int i = 0; i < artistName.length(); i++){
+                    char ch = artistName.charAt(i);
                     if(ch == '€'){
                         tempString2 += ",";
                         ch = ',';
@@ -100,7 +100,7 @@ public class dataSorter{
                         }
                     }
                 }
-                songName = tempString2;
+                artistName = tempString2;
                 msListened = Integer.parseInt(tempMsListened);
 
                 listenEvents.add(listeningEventBinarySearch(listenEvents, songCode), new ListenEvent(msListened, artistName, dateListened, songName, songCode));
@@ -121,11 +121,10 @@ public class dataSorter{
 
             // Testing the arrays we made
 
-            for(int i = 0; i < songs.size(); i++){
-                System.out.println(songs.get(i).getArtistName() + " - " + songs.get(i).getSongName() + " - " + songs.get(i).getMsListened() + " - " + songs.get(i).getSongCode());
-            }
-        
-            
+            //for(int i = 0; i < songs.size(); i++){
+            //    System.out.println(songs.get(i).getArtistName() + " - " + songs.get(i).getSongName() + " - " + songs.get(i).getMsListened() + " - " + songs.get(i).getSongCode());
+            //}
+            //
             //for(int i = 0; i < listenEvents.size(); i++){
             //System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
             //}
@@ -225,5 +224,17 @@ public class dataSorter{
     */
     public int getSongsMsListened(int x){
         return this.songs.get(x).getMsListened();
+    }
+
+    public ArrayList<Song> getSongs(){
+        return this.songs;
+    }
+
+    public ArrayList<ListenEvent> getListenEvents(){
+        return this.listenEvents;
+    }
+
+    public Song getSong(int x){
+        return this.songs.get(x);
     }
 }
