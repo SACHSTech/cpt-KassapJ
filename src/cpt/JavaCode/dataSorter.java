@@ -103,36 +103,32 @@ public class dataSorter{
                 songName = tempString2;
                 msListened = Integer.parseInt(tempMsListened);
 
+                listenEvents.add(listeningEventBinarySearch(listenEvents, songCode), new ListenEvent(msListened, artistName, dateListened, songName, songCode));
+
                 // Use binary search to sort these objects into the arraylist properly
                 // SONGS OBJECT
-                /* 
-                tempIndex = 0;
+               
+                
                 tempIndex = songsBinarySearch(songs, songCode, msListened);
-                if(tempIndex == -1){
-                    break;
-                }
-                else if(tempIndex >= 0){
+                if(tempIndex >= 0){
                     songs.add(tempIndex, new Song(msListened, artistName, songName, songCode));
                 }
-                */
-
-                listenEvents.add(listeningEventBinarySearch(listenEvents, songCode), new ListenEvent(msListened, artistName, dateListened, songName, songCode));
+                
+                
                 
             }
             bufferedReader.close();
 
             // Testing the arrays we made
 
-            /* 
             for(int i = 0; i < songs.size(); i++){
                 System.out.println(songs.get(i).getArtistName() + " - " + songs.get(i).getSongName() + " - " + songs.get(i).getMsListened() + " - " + songs.get(i).getSongCode());
             }
-            */
         
             
-            for(int i = 0; i < listenEvents.size(); i++){
-            System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
-            }
+            //for(int i = 0; i < listenEvents.size(); i++){
+            //System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
+            //}
             
 
         }catch(IOException ioe) {
