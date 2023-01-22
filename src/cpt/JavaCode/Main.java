@@ -38,6 +38,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button sortData;
         Button button1;
         Button button2;
+        Button button3;
         Scene homepage, scene2;
         dataSorter data = new dataSorter("ConvertedFiles/data.csv");
 
@@ -85,7 +86,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         // Creating scene
         homepage = new Scene(root, 1280, 720);
     
-        //====== THIS IS THE FIRST GRAPH=========
+        //====== FIRST SCREEN THAT HAS BUTTON TO SORT DATA =========
+        // Eventually add a drag and drop for the folder
+
         // Button 2
         button2 = new Button("Scene 1");
         button2.setOnAction(e -> window.setScene(homepage));
@@ -96,6 +99,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         layout2.getChildren().add(sortData);
         layout2.setAlignment(button2, Pos.TOP_RIGHT);
         scene2 = new Scene(layout2, 1280, 720);
+
+        //====== SECOND SCREEN WITH FIRST GRAPH======
+        button3 = new Button("Scene 2:");
+        button3.setOnAction(e -> window.setScene(scene2));
+
+        // Look at ensemble to make this graph
+
+
+        //====== THIRD SCREEN WITH SECOND GRAPH======
 
         // Showing scene to stage
         window.setScene(homepage);
