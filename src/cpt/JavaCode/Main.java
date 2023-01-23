@@ -1,5 +1,6 @@
 package cpt.JavaCode;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -34,6 +35,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -73,7 +75,19 @@ public class Main extends Application implements EventHandler<ActionEvent>{
        listenEvents = new ArrayList<ListenEvent>();
         
         // Sort the csv
-        //converter.convert();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File csvLocation = new File("ConvertedFiles");
+        File jsonsLocation = new File("SpotifyJsonFilesHERE");
+        File[] csvs = csvLocation.listFiles();
+        File[] jsons = jsonsLocation.listFiles();
+
+        if(csvs.length == 0 && jsons.length > 0){
+            converter.convert();
+        }
+        else if(jsons.length <= 0){
+            System.out.print("Please drag your jsons in");
+        }
+
         data.sort();
         songs = data.getSongs();
         listenEvents = data.getListenEvents();
@@ -176,21 +190,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             TableColumn msListenedColumn = new TableColumn<Song, Integer>("MsListened");
             msListenedColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
 
-            // add columns
-            songTable.getColumns().add(songNameColumn);
-            songTable.getColumns().add(artistNameColumn);
-            songTable.getColumns().add(msListenedColumn);
-
-            // add our already sorted data
-            for(int i = 0; i < songs.size() - 1; i++){
-                songTable.getItems().add(songs.get(i));
-                //System.out.println(songs.get(i).getSongName());
-            }
-
-            // Create LISTEN EVENT table of values
-            TableView listenEventTable = new TableView<Song>();
-
-            // format columns
             TableColumn yearListenedColumn = new TableColumn<ListenEvent, Integer>("yearListened");
             yearListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("yearListened"));
 
@@ -205,6 +204,21 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
             TableColumn minuteListenedColumn = new TableColumn<ListenEvent, Integer>("minuteListened");
             minuteListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("minuteListened"));
+
+            // add columns
+            songTable.getColumns().add(songNameColumn);
+            songTable.getColumns().add(artistNameColumn);
+            songTable.getColumns().add(msListenedColumn);
+
+            // add our already sorted data
+            for(int i = 0; i < songs.size() - 1; i++){
+                songTable.getItems().add(songs.get(i));
+                //System.out.println(songs.get(i).getSongName());
+            }
+
+            // Create LISTEN EVENT table of values
+            TableView listenEventTable = new TableView<ListenEvent>();
+
             // add columns
             listenEventTable.getColumns().add(songNameColumn);
             listenEventTable.getColumns().add(artistNameColumn);
