@@ -48,7 +48,7 @@ public class Sorting {
             int cur = arr.get(mid).getMsListened();
 
             if(cur == key){
-                return -1;
+                return mid;
             }
             else if(cur < key){
                 low = mid + 1;

@@ -364,25 +364,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Slider slider1 = new Slider(0, songs.size() - 1, 0);
         Slider slider2 = new Slider(0, songs.size() - 1, 0);
 
-        slider1.valueProperty().addListener(new ChangeListener<Number>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-                // TODO Auto-generated method stub
-                
-            }
-            
-        });
-        
-        // Determine min and max songs to show based on slider
-        double min = slider1.getValue();
-        double max = slider2.getValue();
-
         // Convert button
         Button convertButton = new Button();
         convertButton.setText("Show Changes");
-        convertButton.setOnAction(e -> {series1.getData().removeAll();
-            for(int i = (int)min; i < (int)max; i++){
+        convertButton.setOnAction(e -> {series1.getData().clear();
+            for(int i = (int)slider1.getValue(); i < (int)slider2.getValue(); i++){
                 series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
             }
         });

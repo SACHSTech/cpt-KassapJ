@@ -189,14 +189,15 @@ public class dataSorter{
 
         Sorting.mergeSort(tempArr);
 
-        for(int i = 0; i < x.size() - 1; i++){
+        for(int i = 0; i < x.size(); i++){
             int index = Sorting.songsBinarySearch(x, tempArr[i]);
+
             if(index >= 0){
-                x.remove(index);
-                tempSongs.add(0, new Song(tempArr[i], 
+                tempSongs.add(0, new Song(x.get(index).getMsListened(), 
                 x.get(index).getArtistName(),
                 x.get(index).getSongName(),
                 x.get(index).getSongCode()));
+                x.remove(index);
             }
         }
 
