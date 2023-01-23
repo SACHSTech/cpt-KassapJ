@@ -103,13 +103,13 @@ public class dataSorter{
                 artistName = tempString2;
                 msListened = Integer.parseInt(tempMsListened);
 
-                listenEvents.add(listeningEventBinarySearch(listenEvents, songCode), new ListenEvent(msListened, artistName, dateListened, songName, songCode));
+                listenEvents.add(Sorting.listenEventBinarySearch(listenEvents, songCode), new ListenEvent(msListened, artistName, dateListened, songName, songCode));
 
                 // Use binary search to sort these objects into the arraylist properly
                 // SONGS OBJECT
                
                 
-                tempIndex = songsBinarySearch(songs, songCode, msListened);
+                tempIndex = Sorting.songsBinarySearchSort(songs, songCode, msListened);
                 if(tempIndex >= 0){
                     songs.add(tempIndex, new Song(msListened, artistName, songName, songCode));
                 }
@@ -134,66 +134,6 @@ public class dataSorter{
             ioe.printStackTrace();
          }
 
-    }
-
-    /**
-    * this method takes a key and array, and searches through the array (edited to work for the song and listenevent classes) and returns an int
-    * representing the index where the key matches. If not found, it will return where it's supposed to be
-    *
-    * @param int[] array, int key
-    * @return int[] indexes (2 indexes)
-    */
-    public int songsBinarySearch(ArrayList<Song> arr, int key, int msListened){
-
-        int low = 0;
-        int high = arr.size() - 1;
-
-        while(low <= high){
-            int mid = (low + high) / 2;
-            int cur = arr.get(mid).getSongCode();
-            if(cur == key){
-                // Add the objects together
-                arr.get(mid).addMsListened(msListened);
-
-                // return -1 so we don't add it to the arraylist
-                return -1;
-            }
-            else if(cur < key){
-                low = mid + 1;
-            }
-            else{
-                high = mid - 1;
-            }
-        }
-        return high + 1;
-    }
-
-    /**
-    * this method takes a key and array, and searches through the array (edited to work for the song and listenevent classes) and returns an int
-    * representing the index where the key matches. If not found, it will return where it's supposed to be
-    *
-    * @param int[] array, int key
-    * @return int[] indexes (2 indexes)
-    */
-    public int listeningEventBinarySearch(ArrayList<ListenEvent> arr, int key){
-
-        int low = 0;
-        int high = arr.size() - 1;
-
-        while(low <= high){
-            int mid = (low + high) / 2;
-            int cur = arr.get(mid).getSongCode();
-            if(cur == key){
-                return mid;
-            }
-            else if(cur < key){
-                low = mid + 1;
-            }
-            else{
-                high = mid - 1;
-            }
-        }
-        return high + 1;
     }
 
     /**
@@ -243,16 +183,23 @@ public class dataSorter{
         ArrayList <Song> tempSongs;
         tempSongs = new ArrayList<Song>();
 
-        for(int i = 0; i < x.size(); i++){
+        for(int i = 0; i < x.size() - 1; i++){
             tempArr[i] = x.get(i).getMsListened();
         }
 
         Sorting.mergeSort(tempArr);
 
-        
+        for(int i = 0; i < x.size() - 1; i++){
+            int index = Sorting.songsBinarySearch(x, tempArr[i]);
+            if(index >= 0){
+                x.remove(index);
+                tempSongs.add(0, new Song(tempArr[i], 
+                x.get(index).getArtistName(),
+                x.get(index).getSongName(),
+                x.get(index).getSongCode()));
+            }
+        }
 
-
-
-
+        return tempSongs;
     }
 }

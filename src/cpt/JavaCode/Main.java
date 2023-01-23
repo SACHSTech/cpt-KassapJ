@@ -223,7 +223,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             // add our already sorted data
             for(int i = 0; i < songs.size() - 1; i++){
                 songTable.getItems().add(songs.get(i));
-                //System.out.println(songs.get(i).getSongName());
             }
 
             // Create LISTEN EVENT table of values
@@ -278,6 +277,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         //===========================================
         //===========================================
 
+        // Sort based on ms listened
+        songs = data.sortSongsMsListened(songs);
+
         // This graph should show how often you listen to music at certain months, days, hours..
         
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -328,6 +330,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         //===========================================
         //===========================================
         //===========================================
+        boolean reConvert = false;
         BorderPane graphShower2 = new BorderPane();
         HBox graph2Top = new HBox();   
         graphShower2.setTop(graph1Top);
@@ -351,11 +354,23 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         graphShower2.setCenter(barChart);
         // Add button to sort based on ms listened
-        
+
+
+        // Convert button
+        Button convertButton = new Button();
+        convertButton.setText("Show Changes");
+        convertButton.setOnAction(e -> series1.getData().removeAll())
+        ;
+        for(int i = 0; i < songs.size() - 1; i++){
+            series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
+        }
 
         // Creating sliders for bar graph
         Slider slider1 = new Slider(0, songs.size(), 0);
-        graph2Left.getChildren().addAll(slider1);
+        graph2Left.getChildren().addAll(slider1, convertButton);
+
+        
+        
 
         // Determine min and max songs to show based on slider
         double min = slider1.getValue();
