@@ -21,6 +21,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -190,6 +191,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             TableColumn msListenedColumn = new TableColumn<Song, Integer>("MsListened");
             msListenedColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
 
+            TableColumn songNameColumn2 = new TableColumn<Song, String>("Song Name");
+            songNameColumn2.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
+
+            TableColumn artistNameColumn2 = new TableColumn<Song, String>("Artist Name");
+            artistNameColumn2.setCellValueFactory(new PropertyValueFactory<Song, String>("artistName"));
+
+            TableColumn msListenedColumn2 = new TableColumn<Song, Integer>("MsListened");
+            msListenedColumn2.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
+
             TableColumn yearListenedColumn = new TableColumn<ListenEvent, Integer>("yearListened");
             yearListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("yearListened"));
 
@@ -220,9 +230,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             TableView listenEventTable = new TableView<ListenEvent>();
 
             // add columns
-            listenEventTable.getColumns().add(songNameColumn);
-            listenEventTable.getColumns().add(artistNameColumn);
-            listenEventTable.getColumns().add(msListenedColumn);
+            listenEventTable.getColumns().add(songNameColumn2);
+            listenEventTable.getColumns().add(artistNameColumn2);
+            listenEventTable.getColumns().add(msListenedColumn2);
             listenEventTable.getColumns().add(yearListenedColumn);
             listenEventTable.getColumns().add(monthListenedColumn);
             listenEventTable.getColumns().add(dayListenedColumn);
@@ -270,75 +280,29 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         // This graph should show how often you listen to music at certain months, days, hours..
         
-        int eventsJan = 0;
-        int eventsFeb = 0;
-        int eventsMar = 0;
-        int eventsApr = 0;
-        int eventsMay = 0;
-        int eventsJun = 0;
-        int eventsJul = 0;
-        int eventsAug = 0;
-        int eventsSep = 0;
-        int eventsOct = 0;
-        int eventsNov = 0;
-        int eventsDec = 0;
-
-        for(int i = 0; i < listenEvents.size() - 1; i++){
-            int tempMonth = listenEvents.get(i).getMonthListened();
-            if(tempMonth == 1){
-                eventsJan++;
-            }
-            else if(tempMonth == 2){
-                eventsFeb++;
-            }
-            else if(tempMonth == 3){
-                eventsMar++;
-            }
-            else if(tempMonth == 4){
-                eventsApr++;
-            }
-            else if(tempMonth == 5){
-                eventsMay++;
-            }
-            else if(tempMonth == 6){
-                eventsJun++;
-            }
-            else if(tempMonth == 7){
-                eventsJul++;
-            }
-            else if(tempMonth == 8){
-                eventsAug++;
-            }
-            else if(tempMonth == 9){
-                eventsSep++;
-            }
-            else if(tempMonth == 10){
-                eventsOct++;
-            }
-            else if(tempMonth == 11){
-                eventsNov++;
-            }
-            else if(tempMonth == 12){
-                eventsDec++;
-            }
-
-        }
-        int[] timesPerMonth = {eventsJan, eventsFeb, eventsMar, eventsApr, eventsMay, eventsJun, eventsJul, eventsAug, eventsSep, eventsOct, eventsNov, eventsDec};
-        
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        int[] monthCount = new int[12];
 
-        final NumberAxis lineXAxis = new NumberAxis();
-        final NumberAxis lineYAxis = new NumberAxis();
+        // Runs a loop and adds to an int array, the amount of listens where at every month
+        for(int i = 0; i < listenEvents.size(); i++){
+            monthCount[listenEvents.get(i).getMonthListened() - 1]++;
+        } 
+
+        // Define both axis'
+        CategoryAxis lineXAxis = new CategoryAxis();
+        NumberAxis lineYAxis = new NumberAxis();
+        
+        // Set labels
         lineXAxis.setLabel("Months");
         lineYAxis.setLabel("Times listened");
 
-        final LineChart<Number, Number> lineChart = new LineChart<>(lineXAxis, lineYAxis);
-        lineChart.setTitle("Amount of songs listened per month the last year");
+        LineChart lineChart = new LineChart<>(lineXAxis, lineYAxis);
 
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        XYChart.Series series = new XYChart.Series<>();
         series.setName("Monthly");
-        for(int i = 0; i < months.length ; i++){
-            series.getData().add(new XYChart.Data<>(i, timesPerMonth[i]));
+
+        for(int i = 0; i < months.length; i++){
+            series.getData().add(new XYChart.Data<>(months[i], monthCount[i]));
         }
 
         lineChart.getData().add(series);
@@ -347,6 +311,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         HBox graph1Top = new HBox();   
         graphShower1.setTop(graph1Top);
         graphShower1.setCenter(lineChart);
+        VBox graph1Left = new VBox();
+        graphShower1.setLeft(graph1Left);
 
         // Add title to hbox
         Text graph1Title = new Text("Graph #1");
@@ -362,7 +328,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         //===========================================
         //===========================================
         //===========================================
-
+        BorderPane graphShower2 = new BorderPane();
+        HBox graph2Top = new HBox();   
+        graphShower2.setTop(graph1Top);
+        VBox graph2Left = new VBox();
+        graphShower2.setLeft(graph2Left);
 
         final CategoryAxis barXAxis = new CategoryAxis();
         final NumberAxis barYAxis = new NumberAxis();
@@ -373,18 +343,29 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         for(int i = 0; i < songs.size() - 1; i++){
             series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
         }
-        //series1.getData().add(new XYChart.Data<>("Item 2", 80));
-        //series1.getData().add(new XYChart.Data<>("Item 3", 60));
-        //series1.getData().add(new XYChart.Data<>("Item 4", 75));
 
         barChart.getData().add(series1);
         barChart.setTitle("Bar Graph Example");
         barXAxis.setLabel("Items");
         barYAxis.setLabel("Values");
 
-        graph2 = new Scene(barChart, 1280, 720);
+        graphShower2.setCenter(barChart);
+        // Add button to sort based on ms listened
+        
 
-        // Showing scene to stage
+        // Creating sliders for bar graph
+        Slider slider1 = new Slider(0, songs.size(), 0);
+        graph2Left.getChildren().addAll(slider1);
+
+        // Determine min and max songs to show based on slider
+        double min = slider1.getValue();
+
+
+        graph2 = new Scene(graphShower2, 1280, 720);
+
+    
+
+        // ============== Showing scene to stage ==================
         window.setScene(homepage);
         window.show();
     }

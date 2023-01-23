@@ -237,4 +237,22 @@ public class dataSorter{
     public Song getSong(int x){
         return this.songs.get(x);
     }
+
+    public ArrayList<Song> sortSongsMsListened(ArrayList<Song> x){
+        int[] tempArr = new int[x.size()];
+        ArrayList <Song> tempSongs;
+        tempSongs = new ArrayList<Song>();
+
+        for(int i = 0; i < x.size(); i++){
+            tempArr[i] = x.get(i).getMsListened();
+        }
+
+        Sorting.mergeSort(tempArr);
+
+        
+
+
+
+
+    }
 }
