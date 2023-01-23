@@ -55,6 +55,7 @@ import javafx.scene.text.Text;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
         Button sortData;
+        Button button;
         Button button1;
         Button button2;
         Button button3;
@@ -261,11 +262,17 @@ public class Main extends Application implements EventHandler<ActionEvent>{
                 songTable.setVisible(false);
                 listenEventTable.setVisible(true);
             }
+
         });
 
             // Create textbox to search for what we want in our songs
             TextField textField = new TextField();
             String enteredText = textField.getText();
+
+            // Homepage BUtton
+            button = new Button("Homepage");
+            button.setOnAction(e -> window.setScene(homepage));
+            tableTopSection.getChildren().add(button);
         
         
 
@@ -318,12 +325,16 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         VBox graph1Left = new VBox();
         graphShower1.setLeft(graph1Left);
 
+        // Homepage BUtton
+        button = new Button("Homepage");
+        button.setOnAction(e -> window.setScene(homepage));
+
         // Add title to hbox
         Text graph1Title = new Text("Graph #1");
         graph1Title.setFont(font);
         graph1Title.setStrokeWidth(0);
         graph1Title.setFill(Color.BLACK);
-        graph1Top.getChildren().add(graph1Title);
+        graph1Top.getChildren().addAll(graph1Title, button);
         
         graph1 = new Scene(graphShower1, 1280, 720);
         
@@ -335,7 +346,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         boolean reConvert = false;
         BorderPane graphShower2 = new BorderPane();
         HBox graph2Top = new HBox();   
-        graphShower2.setTop(graph1Top);
+        graphShower2.setTop(graph2Top);
         VBox graph2Left = new VBox();
         graphShower2.setLeft(graph2Left);
 
@@ -353,6 +364,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         barChart.setTitle("Bar Graph Example");
         barXAxis.setLabel("Items");
         barYAxis.setLabel("Values");
+
+        // Homepage BUtton
+        button = new Button("Homepage");
+        button.setOnAction(e -> window.setScene(homepage));
+
+        graph2Top.getChildren().addAll(button);
 
         graphShower2.setCenter(barChart);
         // Add button to sort based on ms listened

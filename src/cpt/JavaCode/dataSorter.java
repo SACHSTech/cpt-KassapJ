@@ -82,11 +82,11 @@ public class dataSorter{
                 msListened = Integer.parseInt(tempMsListened);
 
                 tempIndex = Sorting.listenEventBinarySearchSort(listenEvents, (songName + artistName));
-                if( tempIndex == -1){
+                if(tempIndex == -1){
 
                 }
                 else{
-                    listenEvents.add(tempIndex, new ListenEvent(msListened, artistName, dateListened, songName, (artistName + songName)));
+                    listenEvents.add(tempIndex, new ListenEvent(msListened, artistName, dateListened, songName, (songName + artistName)));
                 }
                 
 
@@ -99,9 +99,10 @@ public class dataSorter{
                     songs.add(tempIndex, new Song(msListened, artistName, songName, (songName + artistName)));
                 }
                 
-                
+                //System.out.println("Sorting");
                 
             }
+            System.out.println("sorted");
             bufferedReader.close();
             
 

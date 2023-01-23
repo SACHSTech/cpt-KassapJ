@@ -99,9 +99,12 @@ public class Sorting {
         while(low <= high){
             int mid = (low + high) / 2;
             String cur = (arr.get(mid).getSongName() + arr.get(mid).getArtistName());
+            System.out.println(key);
+
             if(cur.equals(key)){
                 return mid;
             }
+
             // Comparing strings
             if(key.length() <= cur.length()){
                 for(int i = 0; i < key.length(); i++){
@@ -114,6 +117,10 @@ public class Sorting {
                     else if(ch1 > ch2){
                         high = mid -1;
                         break;
+                    }
+                    else if(i == key.length() - 1){
+                        // return -1 so we don't add it to the arraylist
+                        return -1;
                     }
                 }
             }
@@ -129,10 +136,14 @@ public class Sorting {
                         high = mid -1;
                         break;
                     }
+                    else if(i == cur.length() - 1){
+                        // return -1 so we don't add it to the arraylist
+                        return -1;
+                    }
                 }
             }
-        
         }
+        System.out.println("Returned");
         return high + 1;
     }
 
