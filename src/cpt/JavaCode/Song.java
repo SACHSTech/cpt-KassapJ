@@ -69,5 +69,9 @@ public class Song {
         this.msListened += x;
     }
 
+    public void setMsListened(int x){
+        this.msListened = x;
+    }
+
 }
 

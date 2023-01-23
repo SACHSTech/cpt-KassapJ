@@ -183,21 +183,21 @@ public class dataSorter{
         ArrayList <Song> tempSongs;
         tempSongs = new ArrayList<Song>();
 
-        for(int i = 0; i < x.size() - 1; i++){
+        for(int i = 0; i < x.size(); i++){
             tempArr[i] = x.get(i).getMsListened();
         }
 
         Sorting.mergeSort(tempArr);
 
         for(int i = 0; i < x.size(); i++){
-            int index = Sorting.songsBinarySearch(x, tempArr[i]);
+            int index = Sorting.songsLinearSearch(x, tempArr[i]);
 
             if(index >= 0){
                 tempSongs.add(0, new Song(x.get(index).getMsListened(), 
                 x.get(index).getArtistName(),
                 x.get(index).getSongName(),
                 x.get(index).getSongCode()));
-                x.remove(index);
+                //x.get(index).setMsListened(0);
             }
         }
 

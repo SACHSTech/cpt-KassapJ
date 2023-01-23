@@ -38,26 +38,18 @@ public class Sorting {
     * @param int[] array, int key
     * @return int index
     */
-    public static int songsBinarySearch(ArrayList<Song> arr, int key){
+    public static int songsLinearSearch(ArrayList<Song> arr, int key){
 
         int low = 0;
         int high = arr.size() - 1;
 
-        while(low <= high){
-            int mid = (low + high) / 2;
-            int cur = arr.get(mid).getMsListened();
-
-            if(cur == key){
-                return mid;
-            }
-            else if(cur < key){
-                low = mid + 1;
-            }
-            else{
-                high = mid - 1;
+        for(int i = 0; i < arr.size(); i++){
+            int element = arr.get(i).getMsListened();
+            if(element == key){
+                return i;
             }
         }
-        return high + 1;
+        return -1;
     }
 
 
