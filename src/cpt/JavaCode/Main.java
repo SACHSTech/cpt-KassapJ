@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -356,24 +358,41 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         // Add button to sort based on ms listened
 
 
+        
+
+        // Creating sliders for bar graph
+        Slider slider1 = new Slider(0, songs.size() - 1, 0);
+        Slider slider2 = new Slider(0, songs.size() - 1, 0);
+
+        slider1.valueProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+        });
+        
+        // Determine min and max songs to show based on slider
+        double min = slider1.getValue();
+        double max = slider2.getValue();
+
         // Convert button
         Button convertButton = new Button();
         convertButton.setText("Show Changes");
-        convertButton.setOnAction(e -> series1.getData().removeAll())
-        ;
-        for(int i = 0; i < songs.size() - 1; i++){
-            series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
-        }
+        convertButton.setOnAction(e -> {series1.getData().removeAll();
+            for(int i = (int)min; i < (int)max; i++){
+                series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
+            }
+        });
 
-        // Creating sliders for bar graph
-        Slider slider1 = new Slider(0, songs.size(), 0);
-        graph2Left.getChildren().addAll(slider1, convertButton);
+        graph2Left.getChildren().addAll(slider1, slider2, convertButton);
 
         
         
 
-        // Determine min and max songs to show based on slider
-        double min = slider1.getValue();
+    
 
 
         graph2 = new Scene(graphShower2, 1280, 720);
