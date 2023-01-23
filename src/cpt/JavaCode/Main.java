@@ -18,8 +18,11 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -146,29 +149,93 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         BorderPane layout4 = new BorderPane();
 
-        // Create table of values
-        TableView table = new TableView<Song>();
+        //Hbox for top section
+        HBox tableTopSection = new HBox();
+        Label label = new Label("TABLE VIEWER");
+        tableTopSection.getChildren().add(label);
+        layout4.setTop(tableTopSection);
 
-        // format columns
-        TableColumn songNameColumn = new TableColumn<Song, String>("Song Name");
-        songNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll("Songs", "ListenEvents");
+        String selectedOption = choiceBox.getValue();
+        tableTopSection.getChildren().add(choiceBox);
+        
+            if(selectedOption == "Songs"){
+                // Create table of values
+                TableView table = new TableView<Song>();
 
-        TableColumn artistNameColumn = new TableColumn<Song, String>("Artist Name");
-        artistNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("artistName"));
+                // format columns
+                TableColumn songNameColumn = new TableColumn<Song, String>("Song Name");
+                songNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
 
-        TableColumn msListenedColumn = new TableColumn<Song, Integer>("MsListened");
-        msListenedColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
+                TableColumn artistNameColumn = new TableColumn<Song, String>("Artist Name");
+                artistNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("artistName"));
 
-        // add columns
-        table.getColumns().add(songNameColumn);
-        table.getColumns().add(artistNameColumn);
-        table.getColumns().add(msListenedColumn);
+                TableColumn msListenedColumn = new TableColumn<Song, Integer>("MsListened");
+                msListenedColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
 
-        // add our already sorted data
-        for(int i = 0; i < songs.size() - 1; i++){
-            table.getItems().add(songs.get(i));
-        }
-        layout4.setCenter(table);
+                // add columns
+                table.getColumns().add(songNameColumn);
+                table.getColumns().add(artistNameColumn);
+                table.getColumns().add(msListenedColumn);
+
+                // add our already sorted data
+                for(int i = 0; i < songs.size() - 1; i++){
+                    table.getItems().add(songs.get(i));
+                }
+                layout4.setCenter(table);
+            }  
+            else if(selectedOption == "ListenEvents"){
+                // Create table of values
+                TableView table = new TableView<Song>();
+
+                // format columns
+                TableColumn songNameColumn = new TableColumn<ListenEvent, String>("Song Name");
+                songNameColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, String>("songName"));
+
+                TableColumn artistNameColumn = new TableColumn<ListenEvent, String>("Artist Name");
+                artistNameColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, String>("artistName"));
+
+                TableColumn msListenedColumn = new TableColumn<ListenEvent, Integer>("MsListened");
+                msListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("msListened"));
+
+                TableColumn yearListenedColumn = new TableColumn<ListenEvent, Integer>("yearListened");
+                yearListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("yearListened"));
+
+                TableColumn monthListenedColumn = new TableColumn<ListenEvent, Integer>("monthListened");
+                monthListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("monthListened"));
+
+                TableColumn dayListenedColumn = new TableColumn<ListenEvent, Integer>("dayListened");
+                dayListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("dayListened"));
+
+                TableColumn hourListenedColumn = new TableColumn<ListenEvent, Integer>("hourListened");
+                hourListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("hourListened"));
+
+                TableColumn minuteListenedColumn = new TableColumn<ListenEvent, Integer>("minuteListened");
+                minuteListenedColumn.setCellValueFactory(new PropertyValueFactory<ListenEvent, Integer>("minuteListened"));
+                // add columns
+                table.getColumns().add(songNameColumn);
+                table.getColumns().add(artistNameColumn);
+                table.getColumns().add(msListenedColumn);
+                table.getColumns().add(yearListenedColumn);
+                table.getColumns().add(monthListenedColumn);
+                table.getColumns().add(dayListenedColumn);
+                table.getColumns().add(hourListenedColumn);
+                table.getColumns().add(minuteListenedColumn);
+
+                // add our already sorted data
+                for(int i = 0; i < listenEvents.size() - 1; i++){
+                    table.getItems().add(listenEvents.get(i));
+                }
+                layout4.setCenter(table);
+            }
+
+        // Create textbox to search for what we want in our songs
+        TextField textField = new TextField();
+        String enteredText = textField.getText();
+        
+        
+
         tableScene = new Scene(layout4, 1280, 720);
 
 
