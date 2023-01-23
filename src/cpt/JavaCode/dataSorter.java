@@ -53,19 +53,9 @@ public class dataSorter{
                     }
                     count++;
                 }
-                // Create songcode
-                // to do the song code, go through a strings first 2 letters 
-                // or as many as you can if it's less than 2, for both song title and artist
-                // Turn the letter you get to a char, make it upper case and get the Dec for it, then add it to a code
-                // do this and you'll get around a 8 digit code integer.
-                //songCode = 
-                // once you collect all the variables, run a binary search 
-                //to find the right place to insert it based on the songcode
-                //songs.add(new Song(msListened, artistName, songName, songCode))
                 
                 // Fix artist name and song name having € in it, and convert those to commas
                 tempString2 = "";
-                songCode = 0;
                 for(int i = 0; i < songName.length(); i++){
                     char ch = songName.charAt(i);
                     if(ch == '€'){
@@ -74,11 +64,6 @@ public class dataSorter{
                     }
                     else{
                         tempString2 += ch;
-                    }
-                    // Making song code
-                    if(i < 2){
-                        songCode += (Character.toUpperCase(ch));
-                        songCode *= 100;
                     }
                 }
                 songName = tempString2;
@@ -92,42 +77,32 @@ public class dataSorter{
                     else{
                         tempString2 += ch;
                     }
-                    // Making songcode
-                    if(i < 2){
-                        songCode += (Character.toUpperCase(ch));
-                        if(i < 1){
-                            songCode *= 100;
-                        }
-                    }
                 }
                 artistName = tempString2;
                 msListened = Integer.parseInt(tempMsListened);
 
-                listenEvents.add(Sorting.listenEventBinarySearch(listenEvents, songCode), new ListenEvent(msListened, artistName, dateListened, songName, songCode));
+                tempIndex = Sorting.listenEventBinarySearchSort(listenEvents, (songName + artistName));
+                if( tempIndex == -1){
+
+                }
+                else{
+                    listenEvents.add(tempIndex, new ListenEvent(msListened, artistName, dateListened, songName, (artistName + songName)));
+                }
+                
 
                 // Use binary search to sort these objects into the arraylist properly
                 // SONGS OBJECT
                
                 
-                tempIndex = Sorting.songsBinarySearchSort(songs, songCode, msListened);
+                tempIndex = Sorting.songsBinarySearchSort(songs, (songName + artistName), msListened);
                 if(tempIndex >= 0){
-                    songs.add(tempIndex, new Song(msListened, artistName, songName, songCode));
+                    songs.add(tempIndex, new Song(msListened, artistName, songName, (songName + artistName)));
                 }
                 
                 
                 
             }
             bufferedReader.close();
-
-            // Testing the arrays we made
-
-            //for(int i = 0; i < songs.size(); i++){
-            //    System.out.println(songs.get(i).getArtistName() + " - " + songs.get(i).getSongName() + " - " + songs.get(i).getMsListened() + " - " + songs.get(i).getSongCode());
-            //}
-            //
-            //for(int i = 0; i < listenEvents.size(); i++){
-            //System.out.println(listenEvents.get(i).getMsListened() + " - " + listenEvents.get(i).getArtistName() + " - " + listenEvents.get(i).getSongName() + " - " + listenEvents.get(i).getSongCode()  + " - " + listenEvents.get(i).getYearListened()  + " - " + listenEvents.get(i).getMonthListened() + " - " + listenEvents.get(i).getDayListened() + " - " + listenEvents.get(i).getHourListened() + " - " + listenEvents.get(i).getMinuteListened());
-            //}
             
 
         }catch(IOException ioe) {
@@ -196,7 +171,7 @@ public class dataSorter{
                 tempSongs.add(0, new Song(x.get(index).getMsListened(), 
                 x.get(index).getArtistName(),
                 x.get(index).getSongName(),
-                x.get(index).getSongCode()));
+                x.get(index).getCombinedNames()));
                 //x.get(index).setMsListened(0);
             }
         }

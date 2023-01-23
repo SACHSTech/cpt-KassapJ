@@ -4,20 +4,20 @@ public class ListenEvent {
     private String artistName;
     private String songName;
     private String dateListened;
-    private int songCode;
     private int msListened;
     private int yearListened;
     private int monthListened;
     private int dayListened;
     private int hourListened;
     private int minuteListened;
+    private String combinedNames;
 
-    public ListenEvent(int intMsListened, String strArtistName, String strDate, String strSongName, int intSongCode){
+    public ListenEvent(int intMsListened, String strArtistName, String strDate, String strSongName, String strCombinedNames){
         this.artistName = strArtistName;
         this.songName = strSongName;
         this.msListened = intMsListened;
-        this.songCode = intSongCode;
         this.dateListened = strDate;
+        this.combinedNames = strCombinedNames;
 
         //CONVERTING THE DATE AND TIMES TO THEIR OWN INT VARIABLES
         for(int i = 0; i < dateListened.length(); i++){
@@ -83,16 +83,6 @@ public class ListenEvent {
     */
     public String getSongName(){
         return this.songName;
-    }
-
-    /**
-    * Method that gets the value that represents the "code" used to sort the song
-    *
-    * @param N/A
-    * @return String songCode
-    */
-    public int getSongCode(){
-        return this.songCode;
     }
 
     /**

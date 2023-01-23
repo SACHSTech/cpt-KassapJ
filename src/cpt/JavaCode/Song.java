@@ -6,14 +6,14 @@ package cpt.JavaCode;
 public class Song {
     private String artistName;
     private String songName;
-    private int songCode;
+    private String combinedNames;
     private int msListened;
 
-    public Song(int intMsListened, String strArtistName, String strSongName, int intSongCode){
+    public Song(int intMsListened, String strArtistName, String strSongName, String strCombinedNames){
         this.artistName = strArtistName;
         this.songName = strSongName;
         this.msListened = intMsListened;
-        this.songCode = intSongCode;
+        this.combinedNames = strCombinedNames;
 
         // Converting the string date to individual integers
 
@@ -50,16 +50,6 @@ public class Song {
     }
 
     /**
-    * this method returns a intg value that represents the code used to organize this song
-    *
-    * @param N/A
-    * @return int songCode
-    */
-    public int getSongCode(){
-        return this.songCode;
-    }
-
-    /**
     * this method adds a given int representing mslistened, and adds it to the one already in the object
     *
     * @param int msListened
@@ -71,6 +61,10 @@ public class Song {
 
     public void setMsListened(int x){
         this.msListened = x;
+    }
+
+    public String getCombinedNames(){
+        return this.combinedNames;
     }
 
 }

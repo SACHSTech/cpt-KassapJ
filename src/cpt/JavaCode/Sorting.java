@@ -4,29 +4,134 @@ import java.util.ArrayList;
 
 public class Sorting {
     /**
-    * this method takes a key and array, and searches through the array (edited to work for the song and listenevent classes) and returns an int
-    * representing the index where the key matches. If not found, it will return where it's supposed to be
+    * this method takes an array, key and msListened, and sorts the songs given to only have one song each,
+    * collecting all of their mslistened, and sorting them alphabetically
     *
-    * @param int[] array, int key
-    * @return int[] indexes (2 indexes)
+    * @param ArrayList<Song> arr, String key, int msListened
+    * @return int key
     */
-    public static int listenEventBinarySearch(ArrayList<ListenEvent> arr, int key){
+    public static int songsBinarySearchSort(ArrayList<Song> arr, String key, int msListened){
+        // Remove any unknown tracks
+        if(key.equals("Unknown TrackUnknown Artist")){
+            return -1;
+        }
+        
+        int low = 0;
+        int high = arr.size() - 1;
+
+        while(low <= high){
+            int mid = (low + high) / 2;
+            String cur = (arr.get(mid).getSongName() + arr.get(mid).getArtistName());
+
+            if(cur.equals(key)){
+                // Add the objects together
+                arr.get(mid).addMsListened(msListened);
+
+                // return -1 so we don't add it to the arraylist
+                return -1;
+            }
+            else{
+                // Comparing strings
+                if(key.length() <= cur.length()){
+                    for(int i = 0; i < key.length(); i++){
+                        char ch1 = Character.toUpperCase(cur.charAt(i));
+                        char ch2 = Character.toUpperCase(key.charAt(i));
+                        if(ch2 > ch1){
+                            low = mid +1;
+                            break;
+                        }
+                        else if(ch1 > ch2){
+                            high = mid -1;
+                            break;
+                        }
+                        else if(i == key.length() - 1){
+                            // Add the objects together
+                            arr.get(mid).addMsListened(msListened);
+
+                            // return -1 so we don't add it to the arraylist
+                            return -1;
+                        }
+                    }
+                }
+                else if(cur.length() < key.length()){
+                    for(int i = 0; i < cur.length(); i++){
+                        char ch1 = Character.toUpperCase(cur.charAt(i));
+                        char ch2 = Character.toUpperCase(key.charAt(i));
+                        if(ch1 < ch2){
+                            low = mid +1;
+                            break;
+                        }
+                        else if(ch1 > ch2){
+                            high = mid -1;
+                            break;
+                        }
+                        else if(i == cur.length() - 1){
+                            // Add the objects together
+                            arr.get(mid).addMsListened(msListened);
+
+                            // return -1 so we don't add it to the arraylist
+                            return -1;
+                        }
+                    }
+                }
+            }
+            
+        }
+        return high + 1;
+    }
+
+    /**
+    * this method takes an array, key and msListened, and sorts the songs given to only have one song each,
+    * collecting all of their mslistened, and sorting them alphabetically
+    *
+    * @param ArrayList<Song> arr, String key, int msListened
+    * @return int key
+    */
+    public static int listenEventBinarySearchSort(ArrayList<ListenEvent> arr, String key){
+        // Remove any unknown tracks
+        if(key.equals("Unknown TrackUnknown Artist")){
+            return -1;
+        }
 
         int low = 0;
         int high = arr.size() - 1;
 
         while(low <= high){
             int mid = (low + high) / 2;
-            int cur = arr.get(mid).getSongCode();
-            if(cur == key){
+            String cur = (arr.get(mid).getSongName() + arr.get(mid).getArtistName());
+            if(cur.equals(key)){
                 return mid;
             }
-            else if(cur < key){
-                low = mid + 1;
+            // Comparing strings
+            if(key.length() <= cur.length()){
+                for(int i = 0; i < key.length(); i++){
+                    char ch1 = Character.toUpperCase(cur.charAt(i));
+                    char ch2 = Character.toUpperCase(key.charAt(i));
+                    if(ch2 > ch1){
+                        low = mid +1;
+                        break;
+                    }
+                    else if(ch1 > ch2){
+                        high = mid -1;
+                        break;
+                    }
+                }
             }
-            else{
-                high = mid - 1;
+            else if(cur.length() < key.length()){
+                for(int i = 0; i < cur.length(); i++){
+                    char ch1 = Character.toUpperCase(cur.charAt(i));
+                    char ch2 = Character.toUpperCase(key.charAt(i));
+                    if(ch1 < ch2){
+                        low = mid +1;
+                        break;
+                    }
+                    else if(ch1 > ch2){
+                        high = mid -1;
+                        break;
+                    }
+                }
             }
+        
         }
         return high + 1;
     }
@@ -53,37 +158,7 @@ public class Sorting {
     }
 
 
-    /**
-    * this method takes a key and array, and searches through the array (edited to work for the song and listenevent classes) and returns an int
-    * representing the index where the key matches. If not found, it will return where it's supposed to be
-    *
-    * @param int[] array, int key
-    * @return int[] indexes (2 indexes)
-    */
-    public static int songsBinarySearchSort(ArrayList<Song> arr, int key, int msListened){
-
-        int low = 0;
-        int high = arr.size() - 1;
-
-        while(low <= high){
-            int mid = (low + high) / 2;
-            int cur = arr.get(mid).getSongCode();
-            if(cur == key){
-                // Add the objects together
-                arr.get(mid).addMsListened(msListened);
-
-                // return -1 so we don't add it to the arraylist
-                return -1;
-            }
-            else if(cur < key){
-                low = mid + 1;
-            }
-            else{
-                high = mid - 1;
-            }
-        }
-        return high + 1;
-    }
+    
 
 
     public static void mergeSort(int[] arr){
