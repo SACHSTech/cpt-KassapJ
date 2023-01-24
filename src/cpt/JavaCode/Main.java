@@ -22,6 +22,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
@@ -47,10 +48,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /*
- * This is the program that is going to create an object to get the data, which willc reate various other objects that can be serperated by attributes
- * This program however will take that data and be able to filter it out by different properties
- * This program will take that data and put it onto a data visualizer of some sort, probably one line chart and one bar graph
- * This program will also sort through it depending on what the user wants (least to greatest) etc.
+ * 
+ * @author John Matthew Kassapian
+ * @version 1.0
+ * description: A program that will take a user's spotify listening data, and will convert, sort and visualize it on two graphs
  */
 
 public class Main extends Application implements EventHandler<ActionEvent>{
@@ -282,52 +283,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         });
 
-            // SORTING DATA BASED ON BOX
-            // SORTING SONGS =======
-            ChoiceBox<String> tableSongSortSelection = new ChoiceBox<>();
-            tableSongSortSelection.getItems().addAll("Song Name A-Z", "Song Name Z-A", "Artist Name A-Z", "Artist Name Z-A", "MsListened least-greatest", "MsListened greatest-least");
-            String selectedSongSort = tableSelection.getValue();
-            tableTopSection.getChildren().add(tableSongSortSelection);
-
-            // Run a string sort or int sort for song depending on what is chosen
-            tableSongSortSelection.valueProperty().addListener((observable, oldValue, newValue) -> {
-                int tempIndex = 0;
-                ArrayList<Song> tempArrayList = new ArrayList<Song>();
-
-                if (newValue.equals("Song Name A-Z")) {
-            
-                    for(int i = 0; i < songs.size(); i++){
-                        tempIndex = Sorting.songsBinarySearchSort(tempArrayList, songs.get(i).getSongName(), songs.get(i).getMsListened());
-                        if(tempIndex >= 0){
-                            tempArrayList.add(tempIndex, new Song(songs.get(i).getMsListened(), songs.get(i).getArtistName(), songs.get(i).getSongName(), (songs.get(i).getSongName() + songs.get(i).getArtistName())));
-                        }
-                    }
-                    System.out.println("got here");
-                    songs = tempArrayList;
-
-                } else if (newValue.equals("Song Name Z-A")) {
-                    for(int i = songs.size() - 1; i >= 0; i--){
-                        tempIndex = Sorting.songsBinarySearchSort(tempArrayList, songs.get(i).getSongName(), songs.get(i).getMsListened());
-                        if(tempIndex >= 0){
-                            tempArrayList.add(tempIndex, new Song(songs.get(i).getMsListened(), songs.get(i).getSongName(), songs.get(i).getSongName(), (songs.get(i).getSongName() + songs.get(i).getArtistName())));
-                        }
-                    }
-                    System.out.println("got here");
-                    songs = tempArrayList;
-                }
-
-                //clear list of data
-                songItems.clear();
-                // Add newly sorted data
-                for(int i = 0; i < songs.size(); i++){
-                    songItems.add(songs.get(i));
-                }  
-    
-                songTable.setItems(songItems);
-            });
-
-
-
             // Textfield to search for SONG/LISTENEVENT based on name
             TextField searchBar = new TextField();
 
@@ -504,7 +459,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         // This graph should show how often you listen to music at certain months, days, hours..
         
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        int[] days = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
         int[] monthCount = new int[12];
+        int[] dayCount = new int[31];
 
         // Runs a loop and adds to an int array, the amount of listens where at every month
         for(int i = 0; i < listenEvents.size(); i++){
@@ -524,10 +481,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         XYChart.Series series = new XYChart.Series<>();
         series.setName("Monthly");
 
-        for(int i = 0; i < months.length; i++){
-            series.getData().add(new XYChart.Data<>(months[i], monthCount[i]));
-        }
-
+        //add data to linechart
         lineChart.getData().add(series);
 
         BorderPane graphShower1 = new BorderPane();
@@ -536,6 +490,41 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         graphShower1.setCenter(lineChart);
         VBox graph1Left = new VBox();
         graphShower1.setLeft(graph1Left);
+
+        // Boxes that let you choose what data to show
+        ComboBox<String> monthBox = new ComboBox<>();
+        ComboBox<Integer> dayBox = new ComboBox<>();
+
+        monthBox.getItems().addAll("All", "January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        monthBox.setOnAction(e -> {
+            series.getData().clear();
+            String monthSelection = monthBox.getValue();
+            if(monthSelection.equals("All")){
+                lineXAxis.setLabel("Months");
+                dayBox.setDisable(true);
+                for(int i = 0; i < months.length; i++){
+                    series.getData().add(new XYChart.Data<>(months[i], monthCount[i]));
+                }
+            }
+            else{
+                dayBox.setDisable(false);
+                lineXAxis.setLabel("Days");
+                // Runs a loop and adds to an int array, the amount of listens where at every day in the specified month
+                for(int i = 0; i < listenEvents.size(); i++){
+                    if(listenEvents.get(i).getMonthListened() == monthBox.getSelectionModel().getSelectedIndex() - 1){
+                        dayCount[listenEvents.get(i).getDayListened()]++;
+                    }
+                } 
+                    for(int i = 0; i < days.length; i++){
+                        series.getData().add(new XYChart.Data<>(Integer.toString(days[i]), dayCount[i]));
+                    }
+                }
+        });
+        dayBox.getItems().addAll(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31);
+        dayBox.setOnAction(e -> {
+            int daySelection = dayBox.getValue();
+
+        });
 
         // Homepage BUtton
         button = new Button("Homepage");
@@ -546,7 +535,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         graph1Title.setFont(font);
         graph1Title.setStrokeWidth(0);
         graph1Title.setFill(Color.BLACK);
-        graph1Top.getChildren().addAll(graph1Title, button);
+        graph1Top.getChildren().addAll(graph1Title, monthBox, dayBox);
+        graph1Left.getChildren().addAll(button);
         
         graph1 = new Scene(graphShower1, 1280, 720);
         
@@ -569,11 +559,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1.setName("Data Set 1");
         for(int i = 0; i < songs.size() - 1; i++){
-            series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
+            series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMinutesListened()));
         }
 
         barChart.getData().add(series1);
-        barChart.setTitle("Bar Graph Example");
+        barChart.setTitle("Songs With The Most Minutes Listened");
         barXAxis.setLabel("Items");
         barYAxis.setLabel("Values");
 
@@ -581,34 +571,29 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         button = new Button("Homepage");
         button.setOnAction(e -> window.setScene(homepage));
 
-        graph2Top.getChildren().addAll(button);
+        graph2Left.getChildren().addAll(button);
 
         graphShower2.setCenter(barChart);
-        // Add button to sort based on ms listened
 
+        // Add text that shows the amount of songs in the graph
+        Text songsLength = new Text("Number of Songs: " + Integer.toString(songs.size()));
+        songsLength.setFont(font);
 
-        
 
         // Creating sliders for bar graph
-        Slider slider1 = new Slider(0, songs.size() - 1, 0);
-        Slider slider2 = new Slider(0, songs.size() - 1, 0);
+        TextField min = new TextField();
+        TextField max = new TextField();
 
-        // Convert button
-        Button convertButton = new Button();
-        convertButton.setText("Show Changes");
-        convertButton.setOnAction(e -> {series1.getData().clear();
-            for(int i = (int)slider1.getValue(); i < (int)slider2.getValue(); i++){
-                series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMsListened()));
+        Button refresh = new Button("refresh");
+        refresh.setOnAction(e -> {
+            series1.getData().clear();
+            for(int i = Integer.parseInt(min.getText()); i < Integer.parseInt(max.getText()); i++){
+            series1.getData().add(new XYChart.Data<>(songs.get(i).getSongName(), songs.get(i).getMinutesListened()));
             }
         });
 
-        graph2Left.getChildren().addAll(slider1, slider2, convertButton);
 
-        
-        
-
-    
-
+        graph2Top.getChildren().addAll(min, max, refresh, songsLength);
 
         graph2 = new Scene(graphShower2, 1280, 720);
 

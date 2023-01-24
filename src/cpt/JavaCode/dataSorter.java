@@ -139,18 +139,42 @@ public class dataSorter{
         return this.songs.get(x).getMsListened();
     }
 
+    /**
+    * this method will return the songs arraylist from the instance of the datasorter
+    *
+    * @param 
+    * @return ArrayList<Song> songs
+    */
     public ArrayList<Song> getSongs(){
         return this.songs;
     }
 
+    /**
+    * this method will return the listenEvents arraylist from the instance of the datasorter
+    *
+    * @param 
+    * @return ArrayList<ListenEvent> listenEvents
+    */
     public ArrayList<ListenEvent> getListenEvents(){
         return this.listenEvents;
     }
 
+    /**
+    * this method will return the Song object and an index of the songs arraylist
+    *
+    * @param 
+    * @return Song songs.get(x)
+    */
     public Song getSong(int x){
         return this.songs.get(x);
     }
 
+    /**
+    * this method will sort a given arraylist based on it's MsListened
+    *
+    * @param ArrayList<Song> x
+    * @return ArrayList<Song> tempSongs
+    */
     public ArrayList<Song> sortSongsMsListened(ArrayList<Song> x){
         int[] tempArr = new int[x.size()];
         ArrayList <Song> tempSongs;
