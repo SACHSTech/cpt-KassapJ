@@ -297,7 +297,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
                 if (newValue.equals("Song Name A-Z")) {
             
                     for(int i = 0; i < songs.size(); i++){
-                        tempIndex = Sorting.songsBinarySearchSort(tempArrayList, songs.get(i).getArtistName(), songs.get(i).getMsListened());
+                        tempIndex = Sorting.songsBinarySearchSort(tempArrayList, songs.get(i).getSongName(), songs.get(i).getMsListened());
                         if(tempIndex >= 0){
                             tempArrayList.add(tempIndex, new Song(songs.get(i).getMsListened(), songs.get(i).getArtistName(), songs.get(i).getSongName(), (songs.get(i).getSongName() + songs.get(i).getArtistName())));
                         }
@@ -305,6 +305,18 @@ public class Main extends Application implements EventHandler<ActionEvent>{
                     System.out.println("got here");
                     songs = tempArrayList;
 
+                } else if (newValue.equals("Song Name Z-A")) {
+                    for(int i = songs.size() - 1; i >= 0; i--){
+                        tempIndex = Sorting.songsBinarySearchSort(tempArrayList, songs.get(i).getSongName(), songs.get(i).getMsListened());
+                        if(tempIndex >= 0){
+                            tempArrayList.add(tempIndex, new Song(songs.get(i).getMsListened(), songs.get(i).getSongName(), songs.get(i).getSongName(), (songs.get(i).getSongName() + songs.get(i).getArtistName())));
+                        }
+                    }
+                    System.out.println("got here");
+                    songs = tempArrayList;
+                }
+
+                //clear list of data
                 songItems.clear();
                 // Add newly sorted data
                 for(int i = 0; i < songs.size(); i++){
@@ -312,11 +324,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
                 }  
     
                 songTable.setItems(songItems);
-
-                } else if (newValue.equals("ListenEvents")) {
-                    songTable.setVisible(false);
-                    listenEventTable.setVisible(true);
-                }
             });
 
 
