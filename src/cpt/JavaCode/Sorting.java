@@ -99,7 +99,6 @@ public class Sorting {
         while(low <= high){
             int mid = (low + high) / 2;
             String cur = (arr.get(mid).getSongName() + arr.get(mid).getArtistName());
-            System.out.println(key);
 
             if(cur.equals(key)){
                 return mid;
@@ -143,7 +142,6 @@ public class Sorting {
                 }
             }
         }
-        System.out.println("Returned");
         return high + 1;
     }
 
@@ -168,7 +166,105 @@ public class Sorting {
         return -1;
     }
 
+    /**
+    * this method takes an array, key and msListened, and sorts the songs given to only have one song each,
+    * collecting all of their mslistened, and sorting them alphabetically
+    *
+    * @param ArrayList<Song> arr, String key, int msListened
+    * @return int key
+    */
+    public static int songsBinarySearch(ArrayList<Song> arr, String key, ArrayList<Integer> restrictedIndex){        
+        int low = 0;
+        int high = arr.size() - 1;
+        boolean indexValid = false;
+        while(low <= high){
+            int mid = (low + high) / 2;
+            String cur = (arr.get(mid).getSongName() + arr.get(mid).getArtistName());
 
+            if(cur.equals(key)){
+                // If most of the characters match, assume they're the same song
+                // Make sure that we're returning duplicate index's
+                for(int j = 0; j < restrictedIndex.size(); j++){
+                    if(mid == restrictedIndex.get(j)){
+                        indexValid = false;
+                        break;
+                    }
+                    else{
+                        indexValid = true;
+                    }
+                }
+                if(indexValid){
+                    return mid;
+                }
+            }
+            else{
+                // Comparing strings
+                if(key.length() <= cur.length()){
+                    for(int i = 0; i < key.length(); i++){
+                        char ch1 = Character.toUpperCase(cur.charAt(i));
+                        char ch2 = Character.toUpperCase(key.charAt(i));
+                        if(ch2 > ch1){
+                            low = mid +1;
+                            break;
+                        }
+                        else if(ch1 > ch2){
+                            high = mid -1;
+                            break;
+                        }
+                        else if(i == key.length() - 1){
+                            // If most of the characters match, assume they're the same song
+                            // Make sure that we're returning duplicate index's
+                            for(int j = 0; j < restrictedIndex.size(); j++){
+                                if(mid == restrictedIndex.get(j)){
+                                    indexValid = false;
+                                    break;
+                                }
+                                else{
+                                    indexValid = true;
+                                }
+                            }
+                            if(indexValid){
+                                return mid;
+                            }
+                        }
+                    }
+                }
+                else if(cur.length() < key.length()){
+                    for(int i = 0; i < cur.length(); i++){
+                        char ch1 = Character.toUpperCase(cur.charAt(i));
+                        char ch2 = Character.toUpperCase(key.charAt(i));
+                        if(ch1 < ch2){
+                            low = mid +1;
+                            break;
+                        }
+                        else if(ch1 > ch2){
+                            high = mid -1;
+                            break;
+                        }
+                        else if(i == cur.length() - 1){
+                            // If most of the characters match, assume they're the same song
+                            // Make sure that we're returning duplicate index's
+                            for(int j = 0; j < restrictedIndex.size(); j++){
+                                if(mid == restrictedIndex.get(j)){
+                                    indexValid = false;
+                                    break;
+                                }
+                                else{
+                                    indexValid = true;
+                                }
+                            }
+                            if(indexValid){
+                                return mid;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        // Not in Arraylist
+        return -1;
+    }
     
 
 

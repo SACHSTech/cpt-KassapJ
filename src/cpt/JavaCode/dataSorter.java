@@ -99,10 +99,7 @@ public class dataSorter{
                     songs.add(tempIndex, new Song(msListened, artistName, songName, (songName + artistName)));
                 }
                 
-                //System.out.println("Sorting");
-                
             }
-            System.out.println("sorted");
             bufferedReader.close();
             
 

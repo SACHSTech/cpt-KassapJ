@@ -223,10 +223,14 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             songTable.getColumns().add(artistNameColumn);
             songTable.getColumns().add(msListenedColumn);
 
+            ObservableList songItems = FXCollections.observableArrayList();
             // add our already sorted data
             for(int i = 0; i < songs.size() - 1; i++){
-                songTable.getItems().add(songs.get(i));
-            }
+                songItems.add(songs.get(i));
+            }  
+
+            songTable.setItems(songItems);
+
 
             // Create LISTEN EVENT table of values
             TableView listenEventTable = new TableView<ListenEvent>();
@@ -242,9 +246,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             listenEventTable.getColumns().add(minuteListenedColumn);
 
             // add our already sorted data
+            ObservableList listenEventItems = FXCollections.observableArrayList();
+
             for(int i = 0; i < listenEvents.size() - 1; i++){
-               listenEventTable.getItems().add(listenEvents.get(i));
+                listenEventItems.add(listenEvents.get(i));
             }
+
+            listenEventTable.setItems(listenEventItems);
             
             tables.getChildren().add(songTable);
             tables.getChildren().add(listenEventTable);
@@ -265,14 +273,34 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         });
 
-            // Create textbox to search for what we want in our songs
-            TextField textField = new TextField();
-            String enteredText = textField.getText();
+            // Textfield to search for song/listenevent based on name
+            TextField searchBar = new TextField();
 
+            searchBar.textProperty().addListener((observable,oldValue,newValue) -> {
+                ObservableList tempSongItems = FXCollections.observableArrayList();
+                ObservableList tempListenEventItems = FXCollections.observableArrayList();
+                for(int i = 0; i < songs.size(); i++){
+                    if((songs.get(i).getSongName()).toLowerCase().contains(newValue.toLowerCase())){
+                        tempSongItems.add(songs.get(i));
+                    }
+                }
+                for(int i = 0; i < listenEvents.size(); i++){
+                    if((listenEvents.get(i).getSongName()).toLowerCase().contains(newValue.toLowerCase())){
+                        tempListenEventItems.add(listenEvents.get(i));
+                    }
+                }
+
+                songTable.setItems(tempSongItems);
+                listenEventTable.setItems(tempListenEventItems);
+            });
+
+            // Allowing to click and view an element
+
+            
             // Homepage BUtton
             button = new Button("Homepage");
             button.setOnAction(e -> window.setScene(homepage));
-            tableTopSection.getChildren().add(button);
+            tableTopSection.getChildren().addAll(button, searchBar);
         
         
 
