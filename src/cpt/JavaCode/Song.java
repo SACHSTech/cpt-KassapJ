@@ -67,5 +67,9 @@ public class Song {
         return this.combinedNames;
     }
 
+    public int getMinutesListened(){
+        return (this.msListened / 60000);
+    }
+
 }
 

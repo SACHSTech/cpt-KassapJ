@@ -55,15 +55,21 @@ import javafx.scene.text.Text;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
         Button sortData;
+        Button homepageButton;
+        Button tableButton;
+
         Button button;
         Button button1;
         Button button2;
         Button button3;
         Button button4;
         boolean isDataSorted;
+
+        int windowWidth = 1280;
+        int windowHeight = 720;
         private ArrayList <Song> songs;
         private ArrayList <ListenEvent> listenEvents;
-        Scene homepage, scene2, tableScene, graph1, graph2;
+        Scene homepage, scene2, tableScene, graph1, graph2, dataScene;
         dataSorter data = new dataSorter("ConvertedFiles/data.csv");
         JsonToCsv converter = new JsonToCsv();
 
@@ -98,6 +104,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         // Fonts and sizes
         Font font = Font.loadFont("file:Resources/fonts/coolvetica.otf", 45);
+        Font tabFont = Font.loadFont("file:Resources/fonts/coolvetica.otf", 20);
 
         // Window Setup
         Image icon = new Image("file:resources/images/icon.png");
@@ -176,15 +183,18 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         tableTopSection.getChildren().add(label);
         layout4.setTop(tableTopSection);
 
-        ChoiceBox<String> choiceBox = new ChoiceBox<>();
-        choiceBox.getItems().addAll("Songs", "ListenEvents");
-        String selectedOption = choiceBox.getValue();
-        tableTopSection.getChildren().add(choiceBox);
+        ChoiceBox<String> tableSelection = new ChoiceBox<>();
+        tableSelection.getItems().addAll("Songs", "ListenEvents");
+        String selectedOption = tableSelection.getValue();
+        tableTopSection.getChildren().add(tableSelection);
         
             // Create SONGS table of values
             TableView songTable = new TableView<Song>();
 
-            // format columns
+            // Create LISTEN EVENT table of values
+            TableView listenEventTable = new TableView<ListenEvent>();
+
+            // formatting columns for Song objects
             TableColumn songNameColumn = new TableColumn<Song, String>("Song Name");
             songNameColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
 
@@ -194,6 +204,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             TableColumn msListenedColumn = new TableColumn<Song, Integer>("MsListened");
             msListenedColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("msListened"));
 
+            // Formatting columns for listenEvents
             TableColumn songNameColumn2 = new TableColumn<Song, String>("Song Name");
             songNameColumn2.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
 
@@ -225,15 +236,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
             ObservableList songItems = FXCollections.observableArrayList();
             // add our already sorted data
-            for(int i = 0; i < songs.size() - 1; i++){
+            for(int i = 0; i < songs.size(); i++){
                 songItems.add(songs.get(i));
             }  
 
             songTable.setItems(songItems);
 
-
-            // Create LISTEN EVENT table of values
-            TableView listenEventTable = new TableView<ListenEvent>();
 
             // add columns
             listenEventTable.getColumns().add(songNameColumn2);
@@ -257,12 +265,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             tables.getChildren().add(songTable);
             tables.getChildren().add(listenEventTable);
 
+            // SWITCHING BETWEEN TABLES
             // Show the first table by default
             songTable.setVisible(true);
             listenEventTable.setVisible(false);
 
             // Add event handler to switch between the tables when the selection box value changes
-            choiceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            tableSelection.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("Songs")) {
                 songTable.setVisible(true);
                 listenEventTable.setVisible(false);
@@ -273,7 +282,46 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         });
 
-            // Textfield to search for song/listenevent based on name
+            // SORTING DATA BASED ON BOX
+            // SORTING SONGS =======
+            ChoiceBox<String> tableSongSortSelection = new ChoiceBox<>();
+            tableSongSortSelection.getItems().addAll("Song Name A-Z", "Song Name Z-A", "Artist Name A-Z", "Artist Name Z-A", "MsListened least-greatest", "MsListened greatest-least");
+            String selectedSongSort = tableSelection.getValue();
+            tableTopSection.getChildren().add(tableSongSortSelection);
+
+            // Run a string sort or int sort for song depending on what is chosen
+            tableSongSortSelection.valueProperty().addListener((observable, oldValue, newValue) -> {
+                int tempIndex = 0;
+                ArrayList<Song> tempArrayList = new ArrayList<Song>();
+
+                if (newValue.equals("Song Name A-Z")) {
+            
+                    for(int i = 0; i < songs.size(); i++){
+                        tempIndex = Sorting.songsBinarySearchSort(tempArrayList, songs.get(i).getArtistName(), songs.get(i).getMsListened());
+                        if(tempIndex >= 0){
+                            tempArrayList.add(tempIndex, new Song(songs.get(i).getMsListened(), songs.get(i).getArtistName(), songs.get(i).getSongName(), (songs.get(i).getSongName() + songs.get(i).getArtistName())));
+                        }
+                    }
+                    System.out.println("got here");
+                    songs = tempArrayList;
+
+                songItems.clear();
+                // Add newly sorted data
+                for(int i = 0; i < songs.size(); i++){
+                    songItems.add(songs.get(i));
+                }  
+    
+                songTable.setItems(songItems);
+
+                } else if (newValue.equals("ListenEvents")) {
+                    songTable.setVisible(false);
+                    listenEventTable.setVisible(true);
+                }
+            });
+
+
+
+            // Textfield to search for SONG/LISTENEVENT based on name
             TextField searchBar = new TextField();
 
             searchBar.textProperty().addListener((observable,oldValue,newValue) -> {
@@ -294,9 +342,139 @@ public class Main extends Application implements EventHandler<ActionEvent>{
                 listenEventTable.setItems(tempListenEventItems);
             });
 
-            // Allowing to click and view an element
+            // Allowing to click and view a SONG element
 
-            
+            songTable.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                Song selectedSong = (Song) newValue;
+                if (selectedSong != null) {
+                    //====== DATA DISPLAY  ======
+                    //===========================================
+                    //===========================================
+                    //===========================================
+                    //===========================================
+
+                    BorderPane dataDisplay = new BorderPane();
+
+                    //TabsMenu
+                    VBox tabsMenu = new VBox();
+                    Text tabText = new Text("Tabs");
+                    tabText.setFont(tabFont);
+                    tabsMenu.getChildren().add(tabText);
+
+                    // Homepage Buttton
+                    homepageButton = new Button("Homepage");
+                    homepageButton.setOnAction(e -> window.setScene(homepage));
+
+                    // TableViewer
+                    tableButton = new Button("Table of Data");
+                    tableButton.setOnAction(e -> {window.setScene(tableScene);});
+
+                    //Add buttons to tab
+                    tabsMenu.getChildren().addAll(homepageButton, tableButton);
+
+                    // Adding tabs to scene
+                    dataDisplay.setLeft(tabsMenu);
+
+                    // Creating data display
+                    GridPane dataHolder = new GridPane();
+                    dataHolder.setPadding(new Insets(10, 10, 10, 10));
+                    dataHolder.setVgap(8);
+                    dataHolder.setHgap(10);
+
+                    // Adding the data
+                    // Artist Name 
+                    Text artistNameText = new Text("Artist Name: " + selectedSong.getArtistName());
+                    artistNameText.setFont(font);
+                    dataHolder.setConstraints(artistNameText, 0, 0);
+                    // Song Name
+                    Text songNameText = new Text("Song Name: " + selectedSong.getSongName());
+                    songNameText.setFont(font);
+                    dataHolder.setConstraints(songNameText, 0, 1);
+                    // Minutes Listened
+                    Text minutesListenedText = new Text("Minutes Listened: " + selectedSong.getMinutesListened());
+                    minutesListenedText.setFont(font);
+                    dataHolder.setConstraints(minutesListenedText, 0, 2);
+                
+                
+                    dataHolder.getChildren().addAll(artistNameText, songNameText, minutesListenedText);
+
+                    dataDisplay.setCenter(dataHolder);
+
+                    dataScene = new Scene(dataDisplay, windowWidth, windowHeight);
+                    window.setScene(dataScene);
+                }
+            }
+            );
+
+            listenEventTable.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                ListenEvent selectedListenEvent = (ListenEvent) newValue;
+                if (selectedListenEvent != null) {
+                    //====== DATA DISPLAY  ======
+                    //===========================================
+                    //===========================================
+                    //===========================================
+                    //===========================================
+
+                    BorderPane dataDisplay = new BorderPane();
+
+                    //TabsMenu
+                    VBox tabsMenu = new VBox();
+                    Text tabText = new Text("Tabs");
+                    tabText.setFont(tabFont);
+                    tabsMenu.getChildren().add(tabText);
+
+                    // Homepage Buttton
+                    homepageButton = new Button("Homepage");
+                    homepageButton.setOnAction(e -> window.setScene(homepage));
+
+                    // TableViewer
+                    tableButton = new Button("Table of Data");
+                    tableButton.setOnAction(e -> {window.setScene(tableScene);});
+
+                    //Add buttons to tab
+                    tabsMenu.getChildren().addAll(homepageButton, tableButton);
+
+                    // Adding tabs to scene
+                    dataDisplay.setLeft(tabsMenu);
+
+                    // Creating data display
+                    GridPane dataHolder = new GridPane();
+                    dataHolder.setPadding(new Insets(10, 10, 10, 10));
+                    dataHolder.setVgap(8);
+                    dataHolder.setHgap(10);
+
+                    // Adding the data
+                    // Artist Name 
+                    Text artistNameText = new Text("Artist Name: " + selectedListenEvent.getArtistName());
+                    artistNameText.setFont(font);
+                    dataHolder.setConstraints(artistNameText, 0, 0);
+                    // Song Name
+                    Text songNameText = new Text("Song Name: " + selectedListenEvent.getSongName());
+                    songNameText.setFont(font);
+                    dataHolder.setConstraints(songNameText, 0, 1);
+                    // Minutes Listened
+                    Text msListenedText = new Text("MsListened: " + selectedListenEvent.getMsListened());
+                    msListenedText.setFont(font);
+                    dataHolder.setConstraints(msListenedText, 0, 2);
+                    // Date Listened
+                    Text dateListenedText = new Text("Date Listened: " + selectedListenEvent.getDateListened());
+                    dateListenedText.setFont(font);
+                    dataHolder.setConstraints(dateListenedText, 0, 3);
+                
+                
+                    dataHolder.getChildren().addAll(artistNameText, songNameText, msListenedText, dateListenedText);
+
+                    dataDisplay.setCenter(dataHolder);
+
+                    dataScene = new Scene(dataDisplay, windowWidth, windowHeight);
+                    window.setScene(dataScene);
+                }
+            }
+            );
+
+
             // Homepage BUtton
             button = new Button("Homepage");
             button.setOnAction(e -> window.setScene(homepage));
@@ -306,8 +484,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         tableScene = new Scene(layout4, 1280, 720);
 
-
-
+        
         //====== SECOND SCREEN WITH FIRST GRAPH======
         //===========================================
         //===========================================

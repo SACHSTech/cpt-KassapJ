@@ -265,7 +265,6 @@ public class Sorting {
         // Not in Arraylist
         return -1;
     }
-    
 
 
     public static void mergeSort(int[] arr){
