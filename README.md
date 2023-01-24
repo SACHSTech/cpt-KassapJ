@@ -3,6 +3,8 @@
 ## The data that was chosen to be used in this assignment, was user data that anyone can access from their account, by requesting it from spotify. 
 ### I decided that I wanted to work with this data, because I believe data visualization can be extremely fun if it's something the person can relate to. Most people have a spotify account, and I love music. Therefore this was a perfect choice for me and the friends I want to show it to.
 
+## Video Link - https://www.youtube.com/watch?v=5gFFyCb_NdY
+
 ## Here's a Tutorial to add your data to this program
 
 ### First go to your account overview at https://www.spotify.com/us/account/overview/
