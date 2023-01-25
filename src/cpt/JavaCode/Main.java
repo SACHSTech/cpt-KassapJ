@@ -474,7 +474,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         
         // Set labels
         lineXAxis.setLabel("Months");
-        lineYAxis.setLabel("Times listened");
+        lineYAxis.setLabel("Minutes listened");
 
         LineChart lineChart = new LineChart<>(lineXAxis, lineYAxis);
 
@@ -564,8 +564,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         barChart.getData().add(series1);
         barChart.setTitle("Songs With The Most Minutes Listened");
-        barXAxis.setLabel("Items");
-        barYAxis.setLabel("Values");
+        barXAxis.setLabel("Song Names");
+        barYAxis.setLabel("Minutes Listened");
 
         // Homepage BUtton
         button = new Button("Homepage");
